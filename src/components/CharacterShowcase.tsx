@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { CharacterDossier, SeasonNumber, UserProfile } from '../types';
 import { sound } from '../utils/audio';
 import { QuakeSimulator } from './simulators/QuakeSimulator';
@@ -33,6 +33,8 @@ interface CharacterShowcaseProps {
   userProfile: UserProfile;
   onUpdateProfile: (updated: Partial<UserProfile>) => void;
   onNavigateTab: (tab: 'timeline' | 'simulators' | 'moments' | 'clearance') => void;
+  onSeasonChange?: (season: SeasonNumber) => void;
+  initialHeroId?: string;
 }
 
 export const CharacterShowcase: React.FC<CharacterShowcaseProps> = ({
@@ -40,20 +42,45 @@ export const CharacterShowcase: React.FC<CharacterShowcaseProps> = ({
   currentSeason,
   userProfile,
   onUpdateProfile,
-  onNavigateTab
+  onNavigateTab,
+  onSeasonChange,
+  initialHeroId
 }) => {
   // Select all characters that have uploaded portraits
   const featuredCharacters = characters.filter((c) => Boolean(c.imageUrl));
 
-  const [activeHeroId, setActiveHeroId] = useState<string>('daisy-johnson');
+  const [activeHeroId, setActiveHeroId] = useState<string>(initialHeroId || 'daisy-johnson');
   const [selectedSeasonArc, setSelectedSeasonArc] = useState<SeasonNumber>(currentSeason);
+
+  // Sync selectedSeasonArc whenever parent currentSeason changes
+  useEffect(() => {
+    setSelectedSeasonArc(currentSeason);
+  }, [currentSeason]);
+
+  // Sync activeHeroId if initialHeroId changes
+  useEffect(() => {
+    if (initialHeroId && featuredCharacters.some((c) => c.id === initialHeroId)) {
+      setActiveHeroId(initialHeroId);
+    }
+  }, [initialHeroId, featuredCharacters]);
 
   const activeHero =
     featuredCharacters.find((c) => c.id === activeHeroId) || featuredCharacters[0] || characters[0];
 
-  const currentEvo =
-    activeHero.evolutions.find((e) => e.season === selectedSeasonArc) ||
-    activeHero.evolutions[activeHero.evolutions.length - 1];
+  // Robust evolution lookup: never jump forward to season 7 if earlier season is chosen!
+  const getHeroEvolution = () => {
+    const exact = activeHero.evolutions.find((e) => e.season === selectedSeasonArc);
+    if (exact) return exact;
+    // Find closest earlier evolution
+    const prior = activeHero.evolutions
+      .filter((e) => e.season <= selectedSeasonArc)
+      .sort((a, b) => b.season - a.season);
+    if (prior.length > 0) return prior[0];
+    // Fallback to earliest known season, never latest
+    return activeHero.evolutions[0];
+  };
+
+  const currentEvo = getHeroEvolution();
 
   const handleSelectHero = (id: string) => {
     setActiveHeroId(id);
@@ -62,6 +89,7 @@ export const CharacterShowcase: React.FC<CharacterShowcaseProps> = ({
 
   const handleSelectArc = (s: SeasonNumber) => {
     setSelectedSeasonArc(s);
+    onSeasonChange?.(s);
     sound.playBeep(450 + s * 50, 0.05);
   };
 

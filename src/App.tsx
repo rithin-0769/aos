@@ -5,6 +5,7 @@ import { MOMENTS_DATA, EASTER_EGGS_DATA } from './data/momentsData';
 import { TRIVIA_QUESTIONS } from './data/triviaData';
 import { SeasonNumber, UserProfile, EasterEggItem } from './types';
 import { sound } from './utils/audio';
+import { safeSaveToLocalStorage } from './utils/imageUtils';
 
 // Components
 import { TimelineSlider } from './components/TimelineSlider';
@@ -41,6 +42,7 @@ export const App: React.FC = () => {
   // Navigation & Timeline State
   const [activeTab, setActiveTab] = useState<'timeline' | 'showcase' | 'simulators' | 'moments' | 'clearance'>('showcase');
   const [currentSeason, setCurrentSeason] = useState<SeasonNumber>(1);
+  const [selectedHeroForShowcase, setSelectedHeroForShowcase] = useState<string>('daisy-johnson');
   const [activeSim, setActiveSim] = useState<'quake' | 'coulson' | 'may' | 'fitzsimmons' | 'mack'>('quake');
   const [isMuted, setIsMuted] = useState<boolean>(false);
   const [easterEggs, setEasterEggs] = useState<EasterEggItem[]>(EASTER_EGGS_DATA);
@@ -68,9 +70,9 @@ export const App: React.FC = () => {
     };
   });
 
-  // Save profile to localStorage
+  // Save profile to localStorage safely (guards against QuotaExceededError from large photos)
   useEffect(() => {
-    localStorage.setItem('shield_user_profile', JSON.stringify(userProfile));
+    safeSaveToLocalStorage('shield_user_profile', userProfile);
   }, [userProfile]);
 
   const activeSeasonData = SEASONS_DATA.find((s) => s.number === currentSeason) || SEASONS_DATA[0];
@@ -167,15 +169,38 @@ export const App: React.FC = () => {
           </div>
 
           {/* Quick Metrics & Sound Toggle */}
-          <div className="flex items-center gap-3 text-xs font-mono-tech">
+          <div className="flex items-center gap-2 sm:gap-3 text-xs font-mono-tech">
+            {/* Quick Era Switcher Bar accessible across all tabs */}
+            <div className="flex items-center gap-0.5 bg-slate-900/90 p-1 rounded-lg border border-slate-700/80">
+              <span className="text-slate-400 text-[10px] px-1 hidden md:inline font-bold">ERA:</span>
+              {([1, 2, 3, 4, 5, 6, 7] as SeasonNumber[]).map((s) => (
+                <button
+                  key={s}
+                  onClick={() => {
+                    setCurrentSeason(s);
+                    if (s === 4) sound.playGlitch();
+                    else sound.playBeep(320 + s * 70, 0.05);
+                  }}
+                  className={`px-2 py-1 rounded text-[11px] font-bold transition-all ${
+                    currentSeason === s
+                      ? 'bg-sky-600 text-white shadow-md shadow-sky-600/40 scale-105'
+                      : 'text-slate-400 hover:text-white hover:bg-slate-800'
+                  }`}
+                  title={`Jump timeline to Season 0${s}`}
+                >
+                  S0{s}
+                </button>
+              ))}
+            </div>
+
             {/* Clearance Pill */}
             <div
               onClick={() => setActiveTab('clearance')}
               className="cursor-pointer bg-slate-900 hover:bg-slate-850 px-3 py-1.5 rounded-lg border border-slate-700 flex items-center gap-2 transition-colors"
             >
-              <span className="text-slate-400">CLEARANCE:</span>
+              <span className="text-slate-400 hidden sm:inline">CLEARANCE:</span>
               <span className="font-bold text-sky-400">
-                {userProfile.clearanceLevel >= 7 ? 'DIRECTOR' : `LEVEL 0${userProfile.clearanceLevel}`}
+                {userProfile.clearanceLevel >= 7 ? 'DIRECTOR' : `L0${userProfile.clearanceLevel}`}
               </span>
             </div>
 
@@ -272,6 +297,8 @@ export const App: React.FC = () => {
             userProfile={userProfile}
             onUpdateProfile={handleUpdateProfile}
             onNavigateTab={(tab) => setActiveTab(tab)}
+            onSeasonChange={(s) => setCurrentSeason(s)}
+            initialHeroId={selectedHeroForShowcase}
           />
         )}
 
@@ -295,7 +322,8 @@ export const App: React.FC = () => {
               currentSeason={currentSeason}
               spoilerSafeMode={userProfile.spoilerSafeMode}
               onLaunchSimulator={handleLaunchSimulator}
-              onOpenHeroPage={() => {
+              onOpenHeroPage={(heroId) => {
+                setSelectedHeroForShowcase(heroId);
                 setActiveTab('showcase');
                 sound.playBeep(700, 0.06);
               }}

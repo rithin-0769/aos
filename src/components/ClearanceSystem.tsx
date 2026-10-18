@@ -1,6 +1,7 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { UserProfile, TriviaQuestion, EasterEggItem } from '../types';
 import { sound } from '../utils/audio';
+import { processImageFile } from '../utils/imageUtils';
 import confetti from 'canvas-confetti';
 import {
   Shield,
@@ -21,7 +22,9 @@ import {
   Trash2,
   Filter,
   Check,
-  Scan
+  Scan,
+  Loader2,
+  AlertTriangle
 } from 'lucide-react';
 
 interface ClearanceSystemProps {
@@ -110,8 +113,19 @@ export const ClearanceSystem: React.FC<ClearanceSystemProps> = ({
   const [tempDivision, setTempDivision] = useState<UserProfile['division']>(userProfile.division);
   const [tempAvatarUrl, setTempAvatarUrl] = useState<string | undefined>(userProfile.avatarUrl);
   const [tempFilter, setTempFilter] = useState<UserProfile['photoFilter']>(userProfile.photoFilter || 'biometric-cyan');
+  const [isUploadingPhoto, setIsUploadingPhoto] = useState<boolean>(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  // Synchronize local form states with userProfile whenever it changes externally
+  useEffect(() => {
+    setTempName(userProfile.agentName);
+    setTempCallSign(userProfile.callSign);
+    setTempDivision(userProfile.division);
+    setTempAvatarUrl(userProfile.avatarUrl);
+    setTempFilter(userProfile.photoFilter || 'biometric-cyan');
+  }, [userProfile]);
 
   const currentQ = triviaQuestions[currentTriviaIdx];
 
@@ -156,32 +170,46 @@ export const ClearanceSystem: React.FC<ClearanceSystemProps> = ({
     sound.playBeep(520, 0.05);
   };
 
-  // Handle local photo upload
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  // Handle local photo upload with high-performance canvas downscaling & compression
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    const reader = new FileReader();
-    reader.onload = () => {
-      if (typeof reader.result === 'string') {
-        const dataUrl = reader.result;
-        setTempAvatarUrl(dataUrl);
-        onUpdateProfile({ avatarUrl: dataUrl });
-        sound.playBeep(880, 0.08);
+    try {
+      setIsUploadingPhoto(true);
+      setUploadError(null);
+      // Downscale to max 400x480 at 85% JPEG quality (~30-50KB) to prevent localStorage quota crash
+      const result = await processImageFile(file, 400, 480, 0.85);
+      setTempAvatarUrl(result.dataUrl);
+      onUpdateProfile({ avatarUrl: result.dataUrl });
+      sound.playClearancePromotion();
+    } catch (err: any) {
+      console.error('Photo upload processing failed:', err);
+      setUploadError(err?.message || 'Failed to encode photo. Please choose another image.');
+      sound.playGlitch();
+    } finally {
+      setIsUploadingPhoto(false);
+      // Clear file input value so re-selecting the same file triggers onChange
+      if (e.target) {
+        e.target.value = '';
       }
-    };
-    reader.readAsDataURL(file);
+    }
   };
 
   const handleSelectPreset = (url: string) => {
+    setUploadError(null);
     setTempAvatarUrl(url);
     onUpdateProfile({ avatarUrl: url });
     sound.playBeep(720, 0.06);
   };
 
   const handleRemovePhoto = () => {
+    setUploadError(null);
     setTempAvatarUrl(undefined);
     onUpdateProfile({ avatarUrl: undefined });
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
     sound.playBeep(320, 0.08);
   };
 
@@ -347,7 +375,14 @@ export const ClearanceSystem: React.FC<ClearanceSystemProps> = ({
                 {/* PHOTO CONTAINER */}
                 <div className="relative group">
                   <div className="w-28 h-32 rounded-xl bg-slate-900 border-2 border-sky-400/80 flex flex-col items-center justify-center overflow-hidden shadow-lg relative">
-                    {currentPhoto ? (
+                    {isUploadingPhoto ? (
+                      <div className="flex flex-col items-center justify-center p-2 text-center text-sky-400 space-y-1">
+                        <Loader2 className="w-8 h-8 animate-spin text-sky-400" />
+                        <span className="text-[8px] font-mono-tech uppercase tracking-widest text-sky-300">
+                          ENCODING...
+                        </span>
+                      </div>
+                    ) : currentPhoto ? (
                       <>
                         <img
                           src={currentPhoto}
@@ -383,10 +418,11 @@ export const ClearanceSystem: React.FC<ClearanceSystemProps> = ({
                   {/* Quick Photo Overlay Action Button */}
                   <button
                     onClick={() => fileInputRef.current?.click()}
+                    disabled={isUploadingPhoto}
                     title="Upload or change ID photo"
-                    className="absolute -bottom-2 -right-2 p-1.5 rounded-full bg-sky-600 hover:bg-sky-500 text-white shadow-lg border border-sky-300 transition-transform active:scale-90"
+                    className="absolute -bottom-2 -right-2 p-1.5 rounded-full bg-sky-600 hover:bg-sky-500 disabled:opacity-50 text-white shadow-lg border border-sky-300 transition-transform active:scale-90"
                   >
-                    <Camera className="w-3.5 h-3.5" />
+                    {isUploadingPhoto ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Camera className="w-3.5 h-3.5" />}
                   </button>
                 </div>
 
@@ -422,20 +458,36 @@ export const ClearanceSystem: React.FC<ClearanceSystemProps> = ({
               </div>
             </div>
 
+            {/* Upload Error Banner if any */}
+            {uploadError && (
+              <div className="w-full max-w-md p-3 rounded-xl bg-red-950/80 border border-red-500 text-red-200 text-xs font-mono-tech flex items-center gap-2">
+                <AlertTriangle className="w-4 h-4 text-red-400 shrink-0" />
+                <span className="flex-1">{uploadError}</span>
+                <button
+                  onClick={() => setUploadError(null)}
+                  className="text-red-400 hover:text-white text-xs underline font-bold"
+                >
+                  DISMISS
+                </button>
+              </div>
+            )}
+
             {/* Quick Photo Action Pills */}
             <div className="flex flex-wrap gap-2 mt-4 justify-center">
               <button
                 onClick={() => fileInputRef.current?.click()}
-                className="flex items-center gap-1.5 px-3 py-1.5 bg-sky-950 hover:bg-sky-900 border border-sky-500/50 rounded-lg text-xs font-mono-tech text-sky-300 transition-colors shadow"
+                disabled={isUploadingPhoto}
+                className="flex items-center gap-1.5 px-3 py-1.5 bg-sky-950 hover:bg-sky-900 disabled:opacity-50 border border-sky-500/50 rounded-lg text-xs font-mono-tech text-sky-300 transition-colors shadow"
               >
-                <Upload className="w-3.5 h-3.5" />
-                <span>UPLOAD CUSTOM PHOTO</span>
+                {isUploadingPhoto ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Upload className="w-3.5 h-3.5" />}
+                <span>{isUploadingPhoto ? 'PROCESSING IMAGE...' : 'UPLOAD CUSTOM PHOTO'}</span>
               </button>
 
               {currentPhoto && (
                 <button
                   onClick={handleRemovePhoto}
-                  className="flex items-center gap-1.5 px-3 py-1.5 bg-red-950/60 hover:bg-red-900 border border-red-700/50 rounded-lg text-xs font-mono-tech text-red-300 transition-colors"
+                  disabled={isUploadingPhoto}
+                  className="flex items-center gap-1.5 px-3 py-1.5 bg-red-950/60 hover:bg-red-900 disabled:opacity-50 border border-red-700/50 rounded-lg text-xs font-mono-tech text-red-300 transition-colors"
                 >
                   <Trash2 className="w-3.5 h-3.5" />
                   <span>REMOVE PHOTO</span>

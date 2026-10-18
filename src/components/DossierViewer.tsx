@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { CharacterDossier, CharacterEvolution, SeasonNumber } from '../types';
 import { sound } from '../utils/audio';
-import { Shield, Volume2, Sparkles, Award, User, Lock, Crosshair, Cpu, Swords, Bot, Wrench } from 'lucide-react';
+import { Shield, Volume2, Sparkles, Award, User, Lock, Crosshair, Cpu, Swords, Bot, Wrench, Activity } from 'lucide-react';
 
 interface DossierViewerProps {
   characters: CharacterDossier[];
@@ -15,7 +15,8 @@ export const DossierViewer: React.FC<DossierViewerProps> = ({
   characters,
   currentSeason,
   spoilerSafeMode,
-  onLaunchSimulator
+  onLaunchSimulator,
+  onOpenHeroPage
 }) => {
   const [selectedCharId, setSelectedCharId] = useState<string>(characters[0].id);
   const selectedChar = characters.find(c => c.id === selectedCharId) || characters[0];
@@ -119,7 +120,7 @@ export const DossierViewer: React.FC<DossierViewerProps> = ({
               </div>
 
               {/* Open Dedicated Hero Page Button if featured */}
-              {(selectedChar.id === 'daisy-johnson' || selectedChar.id === 'phil-coulson') && onOpenHeroPage && (
+              {Boolean(selectedChar.imageUrl) && onOpenHeroPage && (
                 <button
                   onClick={() => onOpenHeroPage(selectedChar.id)}
                   className="w-full mb-3 py-1.5 px-3 bg-sky-950 hover:bg-sky-900 border border-sky-500/60 rounded-lg text-xs font-mono-tech text-sky-200 flex items-center justify-center gap-1.5 transition-colors shadow"
@@ -159,7 +160,7 @@ export const DossierViewer: React.FC<DossierViewerProps> = ({
                 }}
                 className="w-full py-3 px-4 bg-gradient-to-r from-sky-600 to-cyan-600 hover:from-sky-500 hover:to-cyan-500 text-white font-mono-tech text-xs tracking-wider font-bold rounded-xl shadow-lg shadow-sky-600/30 flex items-center justify-center gap-2 transition-all transform active:scale-95"
               >
-                {selectedChar.heroSimulatorId === 'quake' && <ActivityIcon className="w-4 h-4" />}
+                {selectedChar.heroSimulatorId === 'quake' && <Activity className="w-4 h-4" />}
                 {selectedChar.heroSimulatorId === 'coulson' && <Cpu className="w-4 h-4" />}
                 {selectedChar.heroSimulatorId === 'may' && <Swords className="w-4 h-4" />}
                 {selectedChar.heroSimulatorId === 'fitzsimmons' && <Bot className="w-4 h-4" />}
