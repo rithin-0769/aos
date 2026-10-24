@@ -24,7 +24,8 @@ import {
   Check,
   Scan,
   Loader2,
-  AlertTriangle
+  AlertTriangle,
+  Download
 } from 'lucide-react';
 
 interface ClearanceSystemProps {
@@ -219,6 +220,168 @@ export const ClearanceSystem: React.FC<ClearanceSystemProps> = ({
     sound.playBeep(640, 0.05);
   };
 
+  // 3D Card Tilt on Hover
+  const [cardTilt, setCardTilt] = useState<{ x: number; y: number; shineX: number; shineY: number }>({ x: 0, y: 0, shineX: 50, shineY: 50 });
+  const [isExportingBadge, setIsExportingBadge] = useState<boolean>(false);
+
+  const handleCardMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+    const rotateX = ((y - centerY) / centerY) * -12;
+    const rotateY = ((x - centerX) / centerX) * 12;
+    setCardTilt({
+      x: rotateX,
+      y: rotateY,
+      shineX: (x / rect.width) * 100,
+      shineY: (y / rect.height) * 100
+    });
+  };
+
+  const handleCardMouseLeave = () => {
+    setCardTilt({ x: 0, y: 0, shineX: 50, shineY: 50 });
+  };
+
+  const isDirector = userProfile.clearanceLevel >= 7 || userProfile.xp >= 300;
+
+  // Lanyard Tier Calculation
+  const getLanyardTier = () => {
+    if (isDirector) return { label: 'KOENIG BROTHERS GOLD VIP DIRECTOR LANYARD', color: 'bg-gradient-to-r from-amber-500 via-yellow-300 to-amber-600', text: 'text-amber-300', strap: 'from-amber-600 via-yellow-400 to-amber-600' };
+    if (userProfile.clearanceLevel >= 7) return { label: 'COMMAND GLOW-IN-THE-DARK CYAN LANYARD', color: 'bg-cyan-400', text: 'text-cyan-300', strap: 'from-cyan-600 to-sky-400' };
+    if (userProfile.clearanceLevel >= 4) return { label: 'TACTICAL REINFORCED KEVLAR LANYARD', color: 'bg-zinc-800', text: 'text-zinc-300', strap: 'from-zinc-800 to-zinc-900' };
+    return { label: 'STANDARD BLUE SSR RECRUIT LANYARD', color: 'bg-sky-600', text: 'text-sky-300', strap: 'from-sky-700 to-blue-900' };
+  };
+
+  // High-Res Badge PNG Downloader
+  const handleDownloadBadge = async () => {
+    try {
+      setIsExportingBadge(true);
+      sound.playBeep(900, 0.08);
+
+      const canvas = document.createElement('canvas');
+      canvas.width = 800;
+      canvas.height = 1000;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return;
+
+      // Dark tactical gradient background
+      const grad = ctx.createLinearGradient(0, 0, 0, 1000);
+      grad.addColorStop(0, '#020617');
+      grad.addColorStop(0.5, '#0f172a');
+      grad.addColorStop(1, '#020617');
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, 800, 1000);
+
+      // Card border
+      ctx.strokeStyle = '#38bdf8';
+      ctx.lineWidth = 8;
+      ctx.strokeRect(20, 20, 760, 960);
+
+      // Corner brackets
+      ctx.strokeStyle = '#22d3ee';
+      ctx.lineWidth = 6;
+      ctx.strokeRect(36, 36, 40, 40);
+      ctx.strokeRect(724, 36, 40, 40);
+      ctx.strokeRect(36, 924, 40, 40);
+      ctx.strokeRect(724, 924, 40, 40);
+
+      // Header title
+      ctx.fillStyle = '#bae6fd';
+      ctx.font = 'bold 36px monospace';
+      ctx.fillText('S.H.I.E.L.D. PROTOCOL', 60, 90);
+
+      ctx.fillStyle = '#64748b';
+      ctx.font = '14px monospace';
+      ctx.fillText('STRATEGIC HOMELAND INTERVENTION ENFORCEMENT & LOGISTICS', 60, 120);
+
+      // Clearance Pill
+      ctx.fillStyle = isDirector ? '#b45309' : '#0369a1';
+      ctx.fillRect(500, 55, 260, 50);
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold 18px monospace';
+      const rankText = isDirector ? 'CLEARANCE: DIRECTOR' : `CLEARANCE: LEVEL 0${userProfile.clearanceLevel}`;
+      ctx.fillText(rankText, 515, 87);
+
+      // Photo Frame
+      ctx.fillStyle = '#0f172a';
+      ctx.fillRect(60, 160, 280, 340);
+      ctx.strokeStyle = '#38bdf8';
+      ctx.lineWidth = 4;
+      ctx.strokeRect(60, 160, 280, 340);
+
+      // If avatar exists, draw it
+      const photoToDraw = userProfile.avatarUrl || tempAvatarUrl;
+      if (photoToDraw) {
+        const img = new Image();
+        img.crossOrigin = 'anonymous';
+        await new Promise((resolve) => {
+          img.onload = () => {
+            ctx.drawImage(img, 60, 160, 280, 340);
+            resolve(true);
+          };
+          img.onerror = () => resolve(false);
+          img.src = photoToDraw;
+        });
+      } else {
+        ctx.fillStyle = '#38bdf8';
+        ctx.font = 'bold 24px monospace';
+        ctx.fillText('AGENT RECORD', 110, 340);
+      }
+
+      // Identity Details
+      ctx.fillStyle = '#94a3b8';
+      ctx.font = '16px monospace';
+      ctx.fillText('OPERATIVE IDENTITY:', 380, 200);
+
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold 36px sans-serif';
+      ctx.fillText(userProfile.agentName, 380, 250);
+
+      ctx.fillStyle = '#38bdf8';
+      ctx.font = 'bold 22px monospace';
+      ctx.fillText(`CALL-SIGN: "${userProfile.callSign}"`, 380, 300);
+
+      ctx.fillStyle = '#fbbf24';
+      ctx.font = 'bold 20px monospace';
+      ctx.fillText(`DIVISION: ${userProfile.division.toUpperCase()}`, 380, 350);
+
+      ctx.fillStyle = '#10b981';
+      ctx.font = '18px monospace';
+      ctx.fillText(`XP RATING: ${userProfile.xp} PTS`, 380, 400);
+
+      ctx.fillStyle = '#64748b';
+      ctx.font = '14px monospace';
+      ctx.fillText('AUTHENTICATION: TRISKELION ARCHIVES', 380, 450);
+
+      // Holographic Barcode
+      ctx.fillStyle = '#ffffff';
+      for (let i = 0; i < 40; i++) {
+        const barW = ((i * 7) % 8) + 3;
+        ctx.fillRect(80 + i * 16, 680, barW, 90);
+      }
+
+      ctx.fillStyle = '#94a3b8';
+      ctx.font = '16px monospace';
+      ctx.fillText('SSR-AUTH-SECURITY-BARCODE // ENCRYPTED TRISKELION CHIP', 80, 810);
+
+      // Download Trigger
+      const dataUrl = canvas.toDataURL('image/png');
+      const a = document.createElement('a');
+      a.href = dataUrl;
+      a.download = `SHIELD_CREDENTIAL_${userProfile.agentName.replace(/\s+/g, '_').toUpperCase()}.png`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      sound.playClearancePromotion();
+    } catch (e) {
+      console.error('Badge export failed:', e);
+    } finally {
+      setIsExportingBadge(false);
+    }
+  };
+
   const saveBadge = () => {
     onUpdateProfile({
       agentName: tempName,
@@ -230,8 +393,6 @@ export const ClearanceSystem: React.FC<ClearanceSystemProps> = ({
     setIsEditingBadge(false);
     sound.playBeep(880, 0.08);
   };
-
-  const isDirector = userProfile.clearanceLevel >= 7 || userProfile.xp >= 300;
 
   const handleLanyardClick = () => {
     if (onFindEasterEgg) {
@@ -338,7 +499,43 @@ export const ClearanceSystem: React.FC<ClearanceSystemProps> = ({
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           {/* High-Tech Badge Card */}
           <div className="lg:col-span-6 flex flex-col items-center">
-            <div className="w-full max-w-md p-6 rounded-2xl bg-gradient-to-b from-slate-900 via-slate-950 to-slate-900 border-2 border-sky-500/70 shadow-[0_0_35px_rgba(14,165,233,0.35)] relative overflow-hidden">
+            {/* Koenig Lanyard Strap Header */}
+            <div className="flex flex-col items-center mb-[-8px] z-20">
+              <div
+                onClick={handleLanyardClick}
+                title="S.H.I.E.L.D. Lanyard issued by Koenig Brothers"
+                className={`w-36 h-12 rounded-t-lg bg-gradient-to-r ${getLanyardTier().strap} border-x-2 border-t-2 border-slate-700 shadow-md flex flex-col items-center justify-center cursor-pointer transition-transform hover:scale-105`}
+              >
+                <div className="text-[9px] font-mono-tech font-bold text-slate-950 uppercase tracking-wider">
+                  S.H.I.E.L.D.
+                </div>
+                <div className="text-[7px] font-mono-tech font-black text-slate-900 tracking-tighter">
+                  KOENIG PROTOCOL
+                </div>
+              </div>
+              {/* Metal Badge Clip */}
+              <div className="w-10 h-4 bg-gradient-to-b from-slate-300 via-slate-400 to-slate-500 rounded-sm border border-slate-600 shadow flex items-center justify-center">
+                <div className="w-4 h-1 bg-slate-700 rounded-full" />
+              </div>
+            </div>
+
+            <div
+              onMouseMove={handleCardMouseMove}
+              onMouseLeave={handleCardMouseLeave}
+              style={{
+                transform: `perspective(1000px) rotateX(${cardTilt.x}deg) rotateY(${cardTilt.y}deg)`,
+                transition: cardTilt.x === 0 && cardTilt.y === 0 ? 'transform 0.5s ease-out' : 'none'
+              }}
+              className="w-full max-w-md p-6 rounded-2xl bg-gradient-to-b from-slate-900 via-slate-950 to-slate-900 border-2 border-sky-500/70 shadow-[0_0_35px_rgba(14,165,233,0.35)] relative overflow-hidden"
+            >
+              {/* Dynamic Holographic Glare Sheen */}
+              <div
+                className="absolute inset-0 pointer-events-none opacity-40 mix-blend-overlay transition-opacity"
+                style={{
+                  background: `radial-gradient(circle at ${cardTilt.shineX}% ${cardTilt.shineY}%, rgba(56, 189, 248, 0.4) 0%, transparent 60%)`
+                }}
+              />
+
               {/* Lanyard Clip Hole */}
               <div className="w-16 h-3 bg-slate-950 border border-slate-700 rounded-full mx-auto mb-4 flex items-center justify-center">
                 <div className="w-8 h-1 bg-slate-800 rounded-full" />
@@ -476,17 +673,26 @@ export const ClearanceSystem: React.FC<ClearanceSystemProps> = ({
             <div className="flex flex-wrap gap-2 mt-4 justify-center">
               <button
                 onClick={() => fileInputRef.current?.click()}
-                disabled={isUploadingPhoto}
+                disabled={isUploadingPhoto || isExportingBadge}
                 className="flex items-center gap-1.5 px-3 py-1.5 bg-sky-950 hover:bg-sky-900 disabled:opacity-50 border border-sky-500/50 rounded-lg text-xs font-mono-tech text-sky-300 transition-colors shadow"
               >
                 {isUploadingPhoto ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Upload className="w-3.5 h-3.5" />}
                 <span>{isUploadingPhoto ? 'PROCESSING IMAGE...' : 'UPLOAD CUSTOM PHOTO'}</span>
               </button>
 
+              <button
+                onClick={handleDownloadBadge}
+                disabled={isExportingBadge}
+                className="flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-cyan-600 to-sky-600 hover:from-cyan-500 hover:to-sky-500 disabled:opacity-50 border border-cyan-400 rounded-lg text-xs font-mono-tech text-white font-bold transition-all shadow-lg shadow-cyan-600/30"
+              >
+                {isExportingBadge ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Download className="w-3.5 h-3.5" />}
+                <span>{isExportingBadge ? 'RENDERING PNG...' : 'DOWNLOAD BADGE (PNG)'}</span>
+              </button>
+
               {currentPhoto && (
                 <button
                   onClick={handleRemovePhoto}
-                  disabled={isUploadingPhoto}
+                  disabled={isUploadingPhoto || isExportingBadge}
                   className="flex items-center gap-1.5 px-3 py-1.5 bg-red-950/60 hover:bg-red-900 disabled:opacity-50 border border-red-700/50 rounded-lg text-xs font-mono-tech text-red-300 transition-colors"
                 >
                   <Trash2 className="w-3.5 h-3.5" />

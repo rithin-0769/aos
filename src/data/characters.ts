@@ -11,6 +11,14 @@ export const CHARACTERS_DATA: CharacterDossier[] = [
     imageUrl: "/images/daisy-johnson.webp",
     quote: "I'm not afraid of my powers anymore. I'm in control.",
     audioClipText: "I'm Quake. And when I strike, the whole earth shakes.",
+    frameworkProfile: {
+      alias: "Skye",
+      role: "Suburban Civilian & Secret Resistance Operative",
+      allegiance: "The Resistance",
+      status: "Awakened from Simulation",
+      clearanceLevel: 7,
+      bio: "Woke up in the Framework in a bathtub alongside her boyfriend Grant Ward. Discovered S.H.I.E.L.D. was destroyed and Hydra rules the world. Re-awakened her team to lead the escape."
+    },
     evolutions: [
       {
         season: 1,
@@ -136,6 +144,14 @@ export const CHARACTERS_DATA: CharacterDossier[] = [
     imageUrl: "/images/phil-coulson.webp",
     quote: "It's a magical place.",
     audioClipText: "We are not agents of nothing. We are agents of S.H.I.E.L.D.",
+    frameworkProfile: {
+      alias: "Teacher Coulson",
+      role: "Public High School History Teacher",
+      allegiance: "Civilian",
+      status: "Brainwashed / Passive Observer",
+      clearanceLevel: 1,
+      bio: "Lives a mundane life teaching Hydra propaganda in a classroom, fearful of drawing attention. Drinks blue soap because he believes it cleans away impurities until awakened by Daisy and Jemma."
+    },
     evolutions: [
       {
         season: 1,
@@ -261,6 +277,14 @@ export const CHARACTERS_DATA: CharacterDossier[] = [
     imageUrl: "/images/may.webp",
     quote: "Never call me the Cavalry.",
     audioClipText: "I don't need a weapon. I am one.",
+    frameworkProfile: {
+      alias: "Commander May",
+      role: "Hydra Triskelion High Enforcer",
+      allegiance: "Hydra",
+      status: "Senior Strike Commander",
+      clearanceLevel: 9,
+      bio: "In this reality, May saved the young Inhuman girl Katya in Bahrain, causing a mass catastrophe in Cambridge. Overcome with guilt, she joined Hydra to ruthlessly hunt down Inhumans before discovering Madame Hydra's lies."
+    },
     evolutions: [
       {
         season: 1,
@@ -386,6 +410,14 @@ export const CHARACTERS_DATA: CharacterDossier[] = [
     imageUrl: "/images/fitz.webp",
     quote: "I will find you. In this universe or the next.",
     audioClipText: "I'm a genius with a monkey obsession, and I solve the impossible.",
+    frameworkProfile: {
+      alias: "The Doctor (Leopold Fitz)",
+      role: "Head of Hydra Sci-Tech Division",
+      allegiance: "Hydra",
+      status: "Second-in-Command to Madame Hydra",
+      clearanceLevel: 10,
+      bio: "Raised by his abusive father Alistair Fitz instead of his mother. Grew into a cold, sociopathic monster who experiments on Inhumans and serves as Madame Hydra's beloved ruthless architect."
+    },
     evolutions: [
       {
         season: 1,
@@ -511,6 +543,14 @@ export const CHARACTERS_DATA: CharacterDossier[] = [
     imageUrl: "/images/simmons.webp",
     quote: "The best thing about our team is that we never give up.",
     audioClipText: "I survived an alien planet six light years away. I am not backing down.",
+    frameworkProfile: {
+      alias: "Agent Simmons (The Survivor)",
+      role: "Underground S.H.I.E.L.D. Infiltrator",
+      allegiance: "The Resistance",
+      status: "Presumed Deceased (Buried Alive)",
+      clearanceLevel: 8,
+      bio: "Entered the Framework with full memory, only to discover she was murdered in this reality. Clawed her way out of an unmarked mass grave and hitchhiked across the country to locate Daisy."
+    },
     evolutions: [
       {
         season: 1,
@@ -636,6 +676,14 @@ export const CHARACTERS_DATA: CharacterDossier[] = [
     imageUrl: "/images/mack.webp",
     quote: "I'm the guy who kills Gordon.",
     audioClipText: "My name is Director Alphonso Mackenzie. And we stand for humanity.",
+    frameworkProfile: {
+      alias: "Mack (Devoted Father)",
+      role: "Civilian Architect & Mechanic",
+      allegiance: "Civilian",
+      status: "Peaceful Suburban Resident",
+      clearanceLevel: 1,
+      bio: "His deepest regret was undone: his daughter Hope never died as an infant. Lives a beautiful, joyful life raising her, refusing to leave the Framework until the world dissolves around him."
+    },
     evolutions: [
       {
         season: 1,
@@ -761,6 +809,14 @@ export const CHARACTERS_DATA: CharacterDossier[] = [
     imageUrl: "/images/ward.webp",
     quote: "Hail Hydra.",
     audioClipText: "My allegiance was never to S.H.I.E.L.D.",
+    frameworkProfile: {
+      alias: "Agent Grant Ward (Patriot)",
+      role: "Undercover Deep-Cover Double Agent",
+      allegiance: "The Resistance",
+      status: "Inhuman Protector & Freedom Fighter",
+      clearanceLevel: 8,
+      bio: "In this world, Victoria Hand rescued Ward from juvenile prison instead of Garrett. Grew into a noble hero who infiltrated Hydra to save Skye and smuggle hunted Inhumans to Jeffrey Mace's underground."
+    },
     evolutions: [
       {
         season: 1,
@@ -883,9 +939,275 @@ export const CHARACTERS_DATA: CharacterDossier[] = [
         techRating: 100,
         specialRating: 95,
         specialLabel: "30,000 Year Cosmic Perspective",
-        tacticalNotes: "Defeated multiple trained agents in defensive loops to safeguard the timeline.",
-        primaryWeapon: "Electrochron Regulator Mechanism"
+      }
+    ]
+  },
+  {
+    id: "elena-rodriguez",
+    name: "Elena Rodriguez (Yo-Yo)",
+    actor: "Natalia Cordova-Buckley",
+    origin: "Bogotá, Colombia / Inhuman Slingshot Kinetics",
+    heroSimulatorId: "yoyo",
+    avatarSeed: "yoyo",
+    quote: "I move at the speed of a single heartbeat. Then I snap right back.",
+    audioClipText: "You think you can shoot me? By the time your finger pulls that trigger, I've already taken your gun.",
+    evolutions: [
+      {
+        season: 3,
+        alias: "Slingshot",
+        title: "Inhuman Underground Vigilante & Secret Warrior",
+        clearanceLevel: 4,
+        status: "Active Recruit",
+        allegiance: "S.H.I.E.L.D. Secret Warriors",
+        summary: "Underwent Terrigenesis in Colombia. Can move at superhuman velocity for the duration of a single heartbeat before being snapped back to her starting point. Recruited into Daisy's Secret Warriors.",
+        combatRating: 82,
+        intelRating: 75,
+        techRating: 60,
+        specialRating: 90,
+        specialLabel: "Slingshot Super-Speed",
+        tacticalNotes: "Can disarm multiple armed hostiles in under a fraction of a second. Must calculate return trajectory precisely.",
+        primaryWeapon: "Concealed Stiletto Blades & Speed Disarms"
+      },
+      {
+        season: 4,
+        alias: "Yo-Yo",
+        title: "S.H.I.E.L.D. Strike Agent",
+        clearanceLevel: 6,
+        status: "Active Field Specialist",
+        allegiance: "S.H.I.E.L.D.",
+        summary: "Fought alongside Mack and Coulson against the Watchdogs and AIDA. In the Framework, fought to rescue Mack and wake him from the illusion.",
+        combatRating: 88,
+        intelRating: 80,
+        techRating: 65,
+        specialRating: 92,
+        specialLabel: "Heartbeat Velocity Reflexes",
+        tacticalNotes: "Specialist in hostage rescue and bomb defusal during high-speed pulses.",
+        primaryWeapon: "I.C.E.R. Pistol & Custom Combat Knives"
+      },
+      {
+        season: 5,
+        alias: "Yo-Yo (Bionic Operative)",
+        title: "Cybernetically Enhanced Field Agent",
+        clearanceLevel: 7,
+        status: "Cybernetic Prosthetic Adaptation",
+        allegiance: "S.H.I.E.L.D.",
+        summary: "Both arms severed by Ruby Hale's chakram disc. Fitted with advanced cybernetic robotic arms developed by Fitz. Discovered a horrifying time-loop prophecy of her future self.",
+        combatRating: 94,
+        intelRating: 84,
+        techRating: 75,
+        specialRating: 95,
+        specialLabel: "Bionic Super-Speed Hybrid",
+        tacticalNotes: "Robotic arms provide crushing hydraulic strength coupled with kinetic acceleration.",
+        primaryWeapon: "Titanium Cybernetic Arms & Dual Pistols"
+      },
+      {
+        season: 7,
+        alias: "Elena Rodriguez (Unbound)",
+        title: "Senior S.H.I.E.L.D. Special Operations Commander",
+        clearanceLevel: 9,
+        status: "Powers Fully Unlocked",
+        allegiance: "S.H.I.E.L.D.",
+        summary: "Overcame her psychological trauma in 1983 with Jiaying's guidance. Overcame her bounce-back limitation, achieving true unhindered super-speed without snapping back.",
+        combatRating: 98,
+        intelRating: 88,
+        techRating: 80,
+        specialRating: 99,
+        specialLabel: "Unrestricted Hyper-Velocity",
+        tacticalNotes: "Can run continuously across any distance at supersonic speeds without spatial snapback.",
+        primaryWeapon: "Cybernetic Arms & Kinetic Supersonic Strike"
+      }
+    ]
+  },
+  {
+    id: "bobbi-morse",
+    name: "Bobbi Morse (Mockingbird)",
+    actor: "Adrianne Palicki",
+    origin: "San Diego, California / S.H.I.E.L.D. Academy of Operations",
+    heroSimulatorId: "bobbi",
+    avatarSeed: "bobbi",
+    quote: "I am a biologist with twin battle staves. Don't make me explain the biology of broken bones.",
+    audioClipText: "I don't lose. Not in the lab, and definitely not on the mat.",
+    evolutions: [
+      {
+        season: 2,
+        alias: "Agent 19 / Mockingbird",
+        title: "Undercover Hydra Infiltrator & Senior Field Agent",
+        clearanceLevel: 6,
+        status: "Active Field Specialist",
+        allegiance: "S.H.I.E.L.D. (Gonzales) -> S.H.I.E.L.D. (Coulson)",
+        summary: "Infiltrated Daniel Whitehall's Hydra laboratory before rescuing Simmons. Reunited with her ex-husband Lance Hunter. Master of close-quarters combat with twin shock batons.",
+        combatRating: 95,
+        intelRating: 92,
+        techRating: 88,
+        specialRating: 0,
+        specialLabel: "Master Martial Artist & Biologist",
+        tacticalNotes: "Extensive mastery in Wing Chun, Krav Maga, gymnastics, and forensic bio-chemistry.",
+        primaryWeapon: "Dual Electroshock Battle Staves"
+      },
+      {
+        season: 3,
+        alias: "Mockingbird (Disavowed)",
+        title: "Disavowed S.H.I.E.L.D. Operative",
+        clearanceLevel: 6,
+        status: "Disavowed (Parting Shot Protocol)",
+        allegiance: "None (Honorary S.H.I.E.L.D. Forever)",
+        summary: "Saved the Russian Prime Minister from an Inhuman coup. To protect S.H.I.E.L.D. from political exposure, she and Hunter took the fall, receiving an emotional 'Spy's Goodbye' beer toast.",
+        combatRating: 96,
+        intelRating: 94,
+        techRating: 88,
+        specialRating: 0,
+        specialLabel: "Disavowed Ghost Operative",
+        tacticalNotes: "Operating independently across global black markets without official agency backing.",
+        primaryWeapon: "Custom Collapsible Shock Batons"
+      }
+    ]
+  },
+  {
+    id: "lance-hunter",
+    name: "Lance Hunter",
+    actor: "Nick Blood",
+    origin: "United Kingdom (Special Air Service / Independent Mercenary)",
+    avatarSeed: "hunter",
+    quote: "I'm going to shoot them. That usually works.",
+    audioClipText: "I'm not a company man, Coulson. But I'm loyal to the people in this room.",
+    evolutions: [
+      {
+        season: 2,
+        alias: "Hunter (The Mercenary)",
+        title: "Private Tactical Contractor",
+        clearanceLevel: 3,
+        status: "Contracted Specialist",
+        allegiance: "Independent -> Coulson's S.H.I.E.L.D.",
+        summary: "Hired by Coulson following S.H.I.E.L.D.'s fall. Cynical, highly lethal British SAS veteran with a turbulent past with Bobbi Morse. Proved his unwavering loyalty during Gonzales' coup.",
+        combatRating: 90,
+        intelRating: 82,
+        techRating: 70,
+        specialRating: 0,
+        specialLabel: "SAS Sniper Marksman",
+        tacticalNotes: "Extreme marksmanship, survival evasion, and improvised munitions.",
+        primaryWeapon: "Heckler & Koch HK416 & Sniper Rifle"
+      },
+      {
+        season: 3,
+        alias: "Hunter (The Spy's Goodbye)",
+        title: "Disavowed Field Specialist",
+        clearanceLevel: 5,
+        status: "Disavowed Hero",
+        allegiance: "None (The Spy's Goodbye)",
+        summary: "Assassinated Anton Petrov in Siberia to prevent an Inhuman sanctuary slaughter. Exiled alongside Bobbi to maintain S.H.I.E.L.D.'s secrecy from international war.",
+        combatRating: 92,
+        intelRating: 84,
+        techRating: 72,
+        specialRating: 0,
+        specialLabel: "Black Ops Extraction Specialist",
+        tacticalNotes: "Master of covert extractions and hand-to-hand knife combat.",
+        primaryWeapon: "Suppressed Sig Sauer P226"
+      },
+      {
+        season: 5,
+        alias: "Hunter (The Rescuer)",
+        title: "Fitz's Savior & Freelance Operative",
+        clearanceLevel: 6,
+        status: "Freelance Black Ops Ally",
+        allegiance: "FitzSimmons / S.H.I.E.L.D.",
+        summary: "Broke Leo Fitz out of the maximum security military black site holding facility, stealing a General's RV to track down Enoch and rescue the team in 2091.",
+        combatRating: 93,
+        intelRating: 88,
+        techRating: 75,
+        specialRating: 0,
+        specialLabel: "Master Prison Break Orchestrator",
+        tacticalNotes: "Infiltrated high-security US military detention facility disguised as defense attorneys.",
+        primaryWeapon: "Heckler & Koch MP5 & C4 Explosives"
+      }
+    ]
+  },
+  {
+    id: "deke-shaw",
+    name: "Deke Shaw",
+    actor: "Jeff Ward",
+    origin: "The Lighthouse (Earth Year 2091)",
+    heroSimulatorId: "deke",
+    avatarSeed: "deke",
+    quote: "I left a lemon on your bed. In 2091, that's how you propose marriage!",
+    audioClipText: "I built a multi-million dollar tech company using stuff Fitz and Simmons left behind. You're welcome!",
+    evolutions: [
+      {
+        season: 5,
+        alias: "Deke (Scavenger)",
+        title: "Lighthouse Scavenger & Fixer",
+        clearanceLevel: 2,
+        status: "Refugee from 2091 Dystopia",
+        allegiance: "Lighthouse Human Underground -> S.H.I.E.L.D.",
+        summary: "Born in the ruined dystopian future after Earth's destruction. Revealed to be the biological grandson of Leo Fitz and Jemma Simmons. Transported to the 21st century.",
+        combatRating: 70,
+        intelRating: 88,
+        techRating: 92,
+        specialRating: 0,
+        specialLabel: "Framework Hacker & Scavenger",
+        tacticalNotes: "Expert in anti-gravity belt technology, scavenged tech repair, and black-market bargaining.",
+        primaryWeapon: "Anti-Gravity Belt Device & Plasma Blaster"
+      },
+      {
+        season: 6,
+        alias: "Deke Shaw (Tech CEO)",
+        title: "Founder of 'More Than A Metric' Tech Empire",
+        clearanceLevel: 5,
+        status: "Corporate Tech Innovator",
+        allegiance: "S.H.I.E.L.D.",
+        summary: "Founded a massive Silicon Valley tech startup by packaging S.H.I.E.L.D. tech (Framework VR, LMD sensors) into consumer products before Sarge's Shrike invaded.",
+        combatRating: 78,
+        intelRating: 90,
+        techRating: 95,
+        specialRating: 0,
+        specialLabel: "Tech Billionaire & Inventor",
+        tacticalNotes: "Reverse-engineered Framework VR code and built portable cloaking modules.",
+        primaryWeapon: "Remorath Particle Blaster & Gravity Puck"
+      },
+      {
+        season: 7,
+        alias: "The Deke Squad Director",
+        title: "S.H.I.E.L.D. Director in the Alternate 1980s",
+        clearanceLevel: 10,
+        status: "Alternate Timeline Director",
+        allegiance: "S.H.I.E.L.D. (Alternate Timeline)",
+        summary: "Stayed behind in the 1980s alternate timeline to ensure the team returned home. Fronted an 80s rock band and became the heroic new Director of S.H.I.E.L.D. in that reality.",
+        combatRating: 84,
+        intelRating: 94,
+        techRating: 98,
+        specialRating: 0,
+        specialLabel: "80s Rock Star & Timeline Director",
+        tacticalNotes: "Trained an entire squad of 80s recruits (The Deke Squad) to defend Earth.",
+        primaryWeapon: "Electric Synthesizer Guitar & Laser Blasters"
+      }
+    ]
+  },
+  {
+    id: "robbie-reyes",
+    name: "Robbie Reyes (Ghost Rider)",
+    actor: "Gabriel Luna",
+    origin: "East Los Angeles / Spirit of Vengeance",
+    heroSimulatorId: "ghostrider",
+    avatarSeed: "ghostrider",
+    quote: "The Devil isn't down there. He's inside me. And he demands blood.",
+    audioClipText: "My name is Robbie Reyes. And when you hurt innocent people, you burn for it.",
+    evolutions: [
+      {
+        season: 4,
+        alias: "Ghost Rider",
+        title: "The Spirit of Vengeance",
+        clearanceLevel: 9,
+        status: "Active Super-Entity Ally",
+        allegiance: "The Spirit of Vengeance / S.H.I.E.L.D. Ally",
+        summary: "Struck by drive-by gang gunfire, resurrected when the Spirit of Vengeance granted him demonic power. Drives the 1969 Dodge Charger 'Lucy' engulfed in supernatural Hellfire.",
+        combatRating: 100,
+        intelRating: 78,
+        techRating: 80,
+        specialRating: 100,
+        specialLabel: "Demonic Hellfire & Penance Stare",
+        tacticalNotes: "Invulnerable to conventional firearms. Can summon fiery chains, open inter-dimensional portals, and incinerate Darkhold matter.",
+        primaryWeapon: "Hellfire Iron Chains & 1969 Dodge Charger 'Lucy'"
       }
     ]
   }
 ];
+

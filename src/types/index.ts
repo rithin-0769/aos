@@ -45,12 +45,20 @@ export interface CharacterDossier {
   name: string;
   actor: string;
   origin: string;
-  heroSimulatorId?: 'quake' | 'coulson' | 'may' | 'fitzsimmons' | 'mack' | 'yoyo' | 'ghostrider';
+  heroSimulatorId?: 'quake' | 'coulson' | 'may' | 'fitzsimmons' | 'mack' | 'yoyo' | 'ghostrider' | 'deke' | 'enoch' | 'bobbi';
   avatarSeed: string; // Used for stylized tactical avatars
   imageUrl?: string; // High-res uploaded portrait
   quote: string;
   audioClipText: string;
   evolutions: CharacterEvolution[];
+  frameworkProfile?: {
+    alias: string;
+    role: string;
+    allegiance: 'Hydra' | 'The Resistance' | 'Civilian';
+    status: string;
+    clearanceLevel: number;
+    bio: string;
+  };
 }
 
 export interface FanMoment {
@@ -99,4 +107,63 @@ export interface UserProfile {
   spoilerSafeMode: boolean;
   avatarUrl?: string;
   photoFilter?: 'none' | 'biometric-cyan' | 'hydra-red' | 'framework-green' | 'vintage-sepia';
+  lanyardTier?: 'cloth' | 'kevlar' | 'glow' | 'gold-vip';
 }
+
+// 0-8-4 Classified Artifact
+export interface ClassifiedArtifact {
+  id: string;
+  codename: string;
+  officialDesignation: string;
+  origin: string;
+  dangerClass: 'SAFE' | 'EUCLID' | 'LEVEL 10 BIOHAZARD' | 'EXTINCTION CLASS';
+  description: string;
+  lore: string;
+  containmentProtocol: string;
+  interactivityType: 'darkhold-pages' | 'berserker-charge' | 'monolith-resonance' | 'icer-schematic';
+}
+
+// Zephyr-One World Map Threat Hotspot
+export interface ThreatLocation {
+  id: string;
+  name: string;
+  coordinates: { x: number; y: number }; // Percentage for 2D tactical projection
+  country: string;
+  category: '0-8-4 ANOMALY' | 'HYDRA CELL' | 'INHUMAN OUTBREAK' | 'TEMPORAL RIFT' | 'SECRET BASE';
+  threatLevel: 'MODERATE' | 'CRITICAL' | 'OMEGA' | 'TEMPORAL INVASION';
+  status: 'ACTIVE' | 'CONTAINED' | 'MONITORED';
+  briefing: string;
+  tacticalOptions: {
+    label: string;
+    description: string;
+    recommendedStat: 'combat' | 'intel' | 'tech' | 'special';
+    successMessage: string;
+    xpReward: number;
+  }[];
+}
+
+// Strike Team Battle Simulator
+export interface BattleEnemy {
+  id: string;
+  name: string;
+  seasonAffinity: SeasonNumber;
+  faction: string;
+  hp: number;
+  attackPower: number;
+  defense: number;
+  specialAbility: string;
+  description: string;
+  avatarIcon: string;
+}
+
+export interface SoundboardQuote {
+  id: string;
+  speaker: string;
+  quote: string;
+  context: string;
+  season: SeasonNumber;
+  tag: string;
+  synthPitch: number;
+  synthSpeed: number;
+}
+

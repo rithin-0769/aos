@@ -6,6 +6,11 @@ import { CoulsonSimulator } from './simulators/CoulsonSimulator';
 import { MayCombatSimulator } from './simulators/MayCombatSimulator';
 import { FitzSimmonsLab } from './simulators/FitzSimmonsLab';
 import { ShotgunAxeSimulator } from './simulators/ShotgunAxeSimulator';
+import { YoYoSimulator } from './simulators/YoYoSimulator';
+import { GhostRiderSimulator } from './simulators/GhostRiderSimulator';
+import { BobbiCombatSimulator } from './simulators/BobbiCombatSimulator';
+import { DekeSynthSimulator } from './simulators/DekeSynthSimulator';
+import { EnochTimeLoopSimulator } from './simulators/EnochTimeLoopSimulator';
 import {
   Shield,
   Volume2,
@@ -432,6 +437,11 @@ export const CharacterShowcase: React.FC<CharacterShowcaseProps> = ({
             </div>
           </div>
         )}
+        {activeHero.id === 'elena-rodriguez' && <YoYoSimulator />}
+        {activeHero.id === 'robbie-reyes' && <GhostRiderSimulator />}
+        {activeHero.id === 'bobbi-morse' && <BobbiCombatSimulator />}
+        {activeHero.id === 'deke-shaw' && <DekeSynthSimulator />}
+        {activeHero.id === 'enoch-coltrane' && <EnochTimeLoopSimulator />}
       </div>
     </div>
   );

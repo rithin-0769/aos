@@ -17,8 +17,18 @@ import { CoulsonSimulator } from './components/simulators/CoulsonSimulator';
 import { MayCombatSimulator } from './components/simulators/MayCombatSimulator';
 import { FitzSimmonsLab } from './components/simulators/FitzSimmonsLab';
 import { ShotgunAxeSimulator } from './components/simulators/ShotgunAxeSimulator';
+import { YoYoSimulator } from './components/simulators/YoYoSimulator';
+import { GhostRiderSimulator } from './components/simulators/GhostRiderSimulator';
+import { BobbiCombatSimulator } from './components/simulators/BobbiCombatSimulator';
+import { DekeSynthSimulator } from './components/simulators/DekeSynthSimulator';
+import { EnochTimeLoopSimulator } from './components/simulators/EnochTimeLoopSimulator';
 
 import { CharacterShowcase } from './components/CharacterShowcase';
+import { ZephyrWorldMap } from './components/ZephyrWorldMap';
+import { StrikeTeamBattle } from './components/StrikeTeamBattle';
+import { ArtifactArchive } from './components/ArtifactArchive';
+import { SoundboardTerminal } from './components/SoundboardTerminal';
+import { FrameworkOverlay } from './components/FrameworkOverlay';
 
 // Icons
 import {
@@ -35,15 +45,26 @@ import {
   Radio,
   Sparkles,
   Info,
-  UserCheck
+  UserCheck,
+  Globe,
+  Flame,
+  Music,
+  BookOpen,
+  Terminal,
+  Headphones
 } from 'lucide-react';
 
 export const App: React.FC = () => {
   // Navigation & Timeline State
-  const [activeTab, setActiveTab] = useState<'timeline' | 'showcase' | 'simulators' | 'moments' | 'clearance'>('showcase');
+  const [activeTab, setActiveTab] = useState<
+    'showcase' | 'timeline' | 'simulators' | 'moments' | 'clearance' | 'worldmap' | 'battles' | 'artifacts' | 'soundboard'
+  >('showcase');
+  const [isFrameworkMode, setIsFrameworkMode] = useState<boolean>(false);
   const [currentSeason, setCurrentSeason] = useState<SeasonNumber>(1);
   const [selectedHeroForShowcase, setSelectedHeroForShowcase] = useState<string>('daisy-johnson');
-  const [activeSim, setActiveSim] = useState<'quake' | 'coulson' | 'may' | 'fitzsimmons' | 'mack'>('quake');
+  const [activeSim, setActiveSim] = useState<
+    'quake' | 'coulson' | 'may' | 'fitzsimmons' | 'mack' | 'yoyo' | 'ghostrider' | 'bobbi' | 'deke' | 'enoch'
+  >('quake');
   const [isMuted, setIsMuted] = useState<boolean>(false);
   const [easterEggs, setEasterEggs] = useState<EasterEggItem[]>(EASTER_EGGS_DATA);
   const [recentEggNotice, setRecentEggNotice] = useState<string | null>(null);
@@ -109,10 +130,23 @@ export const App: React.FC = () => {
   };
 
   const handleLaunchSimulator = (simId: string) => {
-    if (simId === 'quake' || simId === 'coulson' || simId === 'may' || simId === 'fitzsimmons' || simId === 'mack') {
-      setActiveSim(simId as typeof activeSim);
-      setActiveTab('simulators');
-    }
+    setActiveSim(simId as typeof activeSim);
+    setActiveTab('simulators');
+    sound.playBeep(700, 0.06);
+  };
+
+  const handleAwardXp = (amount: number, reason: string) => {
+    setUserProfile((prev) => {
+      const nextXp = prev.xp + amount;
+      const nextLevel = Math.min(10, Math.floor(nextXp / 60) + 1);
+      return {
+        ...prev,
+        xp: nextXp,
+        clearanceLevel: nextLevel
+      };
+    });
+    setRecentEggNotice(`${reason} (+${amount} XP)`);
+    setTimeout(() => setRecentEggNotice(null), 4000);
   };
 
   // Determine dynamic body styles based on season
@@ -193,6 +227,19 @@ export const App: React.FC = () => {
               ))}
             </div>
 
+            {/* Framework Override Switcher */}
+            <button
+              onClick={() => {
+                sound.playGlitch();
+                setIsFrameworkMode(true);
+              }}
+              className="px-2.5 py-1.5 rounded-lg text-xs font-mono-tech font-bold bg-emerald-950/90 hover:bg-emerald-900 border border-emerald-500 text-emerald-300 transition-all flex items-center gap-1.5 shadow-[0_0_12px_rgba(16,185,129,0.3)] animate-pulse"
+              title="Enter Madame Hydra's Framework Simulation"
+            >
+              <span className="text-sm">🐙</span>
+              <span className="hidden sm:inline">FRAMEWORK</span>
+            </button>
+
             {/* Clearance Pill */}
             <div
               onClick={() => setActiveTab('clearance')}
@@ -219,7 +266,7 @@ export const App: React.FC = () => {
         <nav className="max-w-7xl mx-auto px-4 flex gap-1 sm:gap-2 overflow-x-auto pb-2 scrollbar-none text-xs font-mono-tech">
           <button
             onClick={() => { setActiveTab('showcase'); sound.playBeep(480, 0.04); }}
-            className={`flex items-center gap-2 px-3.5 py-2 rounded-lg transition-all ${
+            className={`flex items-center gap-1.5 px-3 py-2 rounded-lg whitespace-nowrap transition-all ${
               activeTab === 'showcase'
                 ? 'bg-sky-600 text-white font-bold shadow-md shadow-sky-600/30'
                 : 'text-slate-400 hover:text-white hover:bg-slate-900'
@@ -230,51 +277,99 @@ export const App: React.FC = () => {
           </button>
 
           <button
+            onClick={() => { setActiveTab('worldmap'); sound.playBeep(480, 0.04); }}
+            className={`flex items-center gap-1.5 px-3 py-2 rounded-lg whitespace-nowrap transition-all ${
+              activeTab === 'worldmap'
+                ? 'bg-cyan-600 text-white font-bold shadow-md shadow-cyan-600/30'
+                : 'text-slate-400 hover:text-white hover:bg-slate-900'
+            }`}
+          >
+            <Globe className="w-4 h-4 text-cyan-300" />
+            <span>WORLD RADAR</span>
+          </button>
+
+          <button
+            onClick={() => { setActiveTab('battles'); sound.playBeep(480, 0.04); }}
+            className={`flex items-center gap-1.5 px-3 py-2 rounded-lg whitespace-nowrap transition-all ${
+              activeTab === 'battles'
+                ? 'bg-red-600 text-white font-bold shadow-md shadow-red-600/30'
+                : 'text-slate-400 hover:text-white hover:bg-slate-900'
+            }`}
+          >
+            <Swords className="w-4 h-4 text-rose-300" />
+            <span>STRIKE ARENA</span>
+          </button>
+
+          <button
+            onClick={() => { setActiveTab('artifacts'); sound.playBeep(480, 0.04); }}
+            className={`flex items-center gap-1.5 px-3 py-2 rounded-lg whitespace-nowrap transition-all ${
+              activeTab === 'artifacts'
+                ? 'bg-amber-600 text-white font-bold shadow-md shadow-amber-600/30'
+                : 'text-slate-400 hover:text-white hover:bg-slate-900'
+            }`}
+          >
+            <BookOpen className="w-4 h-4 text-amber-300" />
+            <span>0-8-4 ARTIFACTS</span>
+          </button>
+
+          <button
             onClick={() => { setActiveTab('timeline'); sound.playBeep(480, 0.04); }}
-            className={`flex items-center gap-2 px-3.5 py-2 rounded-lg transition-all ${
+            className={`flex items-center gap-1.5 px-3 py-2 rounded-lg whitespace-nowrap transition-all ${
               activeTab === 'timeline'
                 ? 'bg-sky-600 text-white font-bold shadow-md shadow-sky-600/30'
                 : 'text-slate-400 hover:text-white hover:bg-slate-900'
             }`}
           >
             <Radio className="w-4 h-4" />
-            <span>TIMELINE & DOSSIERS</span>
+            <span>TIMELINE</span>
           </button>
 
           <button
             onClick={() => { setActiveTab('simulators'); sound.playBeep(480, 0.04); }}
-            className={`flex items-center gap-2 px-3.5 py-2 rounded-lg transition-all ${
+            className={`flex items-center gap-1.5 px-3 py-2 rounded-lg whitespace-nowrap transition-all ${
               activeTab === 'simulators'
                 ? 'bg-sky-600 text-white font-bold shadow-md shadow-sky-600/30'
                 : 'text-slate-400 hover:text-white hover:bg-slate-900'
             }`}
           >
             <Activity className="w-4 h-4" />
-            <span>HERO SIMULATORS</span>
+            <span>SIMULATORS</span>
+          </button>
+
+          <button
+            onClick={() => { setActiveTab('soundboard'); sound.playBeep(480, 0.04); }}
+            className={`flex items-center gap-1.5 px-3 py-2 rounded-lg whitespace-nowrap transition-all ${
+              activeTab === 'soundboard'
+                ? 'bg-purple-600 text-white font-bold shadow-md shadow-purple-600/30'
+                : 'text-slate-400 hover:text-white hover:bg-slate-900'
+            }`}
+          >
+            <Headphones className="w-4 h-4 text-purple-300" />
+            <span>SOUNDBOARD</span>
           </button>
 
           <button
             onClick={() => { setActiveTab('moments'); sound.playBeep(480, 0.04); }}
-            className={`flex items-center gap-2 px-3.5 py-2 rounded-lg transition-all ${
+            className={`flex items-center gap-1.5 px-3 py-2 rounded-lg whitespace-nowrap transition-all ${
               activeTab === 'moments'
                 ? 'bg-sky-600 text-white font-bold shadow-md shadow-sky-600/30'
                 : 'text-slate-400 hover:text-white hover:bg-slate-900'
             }`}
           >
             <MessageSquareQuote className="w-4 h-4" />
-            <span>FAN MOMENTS & QUOTES</span>
+            <span>FAN MOMENTS</span>
           </button>
 
           <button
             onClick={() => { setActiveTab('clearance'); sound.playBeep(480, 0.04); }}
-            className={`flex items-center gap-2 px-3.5 py-2 rounded-lg transition-all ${
+            className={`flex items-center gap-1.5 px-3 py-2 rounded-lg whitespace-nowrap transition-all ${
               activeTab === 'clearance'
                 ? 'bg-sky-600 text-white font-bold shadow-md shadow-sky-600/30'
                 : 'text-slate-400 hover:text-white hover:bg-slate-900'
             }`}
           >
             <Award className="w-4 h-4" />
-            <span>CLEARANCE & BADGE</span>
+            <span>ID BADGE & EXAM</span>
           </button>
         </nav>
       </header>
@@ -338,62 +433,122 @@ export const App: React.FC = () => {
             <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-none text-xs font-mono-tech">
               <button
                 onClick={() => { setActiveSim('quake'); sound.playBeep(500, 0.05); }}
-                className={`flex items-center gap-1.5 px-3.5 py-2 rounded-lg border transition-all ${
+                className={`flex items-center gap-1.5 px-3.5 py-2 rounded-lg border whitespace-nowrap transition-all ${
                   activeSim === 'quake'
                     ? 'bg-sky-950 border-sky-400 text-sky-200 font-bold shadow'
                     : 'bg-slate-950/60 border-slate-800 text-slate-400 hover:border-slate-700'
                 }`}
               >
                 <Activity className="w-4 h-4 text-sky-400" />
-                <span>QUAKE // SEISMIC WAVES</span>
+                <span>QUAKE</span>
               </button>
 
               <button
                 onClick={() => { setActiveSim('coulson'); sound.playBeep(500, 0.05); }}
-                className={`flex items-center gap-1.5 px-3.5 py-2 rounded-lg border transition-all ${
+                className={`flex items-center gap-1.5 px-3.5 py-2 rounded-lg border whitespace-nowrap transition-all ${
                   activeSim === 'coulson'
                     ? 'bg-sky-950 border-sky-400 text-sky-200 font-bold shadow'
                     : 'bg-slate-950/60 border-slate-800 text-slate-400 hover:border-slate-700'
                 }`}
               >
                 <Cpu className="w-4 h-4 text-sky-400" />
-                <span>COULSON // SHIELD & ROBOTIC HAND</span>
+                <span>COULSON</span>
               </button>
 
               <button
                 onClick={() => { setActiveSim('may'); sound.playBeep(500, 0.05); }}
-                className={`flex items-center gap-1.5 px-3.5 py-2 rounded-lg border transition-all ${
+                className={`flex items-center gap-1.5 px-3.5 py-2 rounded-lg border whitespace-nowrap transition-all ${
                   activeSim === 'may'
                     ? 'bg-sky-950 border-sky-400 text-sky-200 font-bold shadow'
                     : 'bg-slate-950/60 border-slate-800 text-slate-400 hover:border-slate-700'
                 }`}
               >
                 <Swords className="w-4 h-4 text-sky-400" />
-                <span>MAY // "THE CAVALRY" COMBAT</span>
+                <span>MAY</span>
               </button>
 
               <button
                 onClick={() => { setActiveSim('fitzsimmons'); sound.playBeep(500, 0.05); }}
-                className={`flex items-center gap-1.5 px-3.5 py-2 rounded-lg border transition-all ${
+                className={`flex items-center gap-1.5 px-3.5 py-2 rounded-lg border whitespace-nowrap transition-all ${
                   activeSim === 'fitzsimmons'
                     ? 'bg-sky-950 border-sky-400 text-sky-200 font-bold shadow'
                     : 'bg-slate-950/60 border-slate-800 text-slate-400 hover:border-slate-700'
                 }`}
               >
                 <Bot className="w-4 h-4 text-cyan-400" />
-                <span>FITZSIMMONS // LAB & D.W.A.R.F.S</span>
+                <span>FITZSIMMONS</span>
               </button>
 
               <button
                 onClick={() => { setActiveSim('mack'); sound.playBeep(500, 0.05); }}
-                className={`flex items-center gap-1.5 px-3.5 py-2 rounded-lg border transition-all ${
+                className={`flex items-center gap-1.5 px-3.5 py-2 rounded-lg border whitespace-nowrap transition-all ${
                   activeSim === 'mack'
                     ? 'bg-amber-950 border-amber-400 text-amber-200 font-bold shadow'
                     : 'bg-slate-950/60 border-slate-800 text-slate-400 hover:border-slate-700'
                 }`}
               >
                 <Wrench className="w-4 h-4 text-amber-400" />
-                <span>MACK // SHOTGUN-AXE FORGE</span>
+                <span>MACK</span>
+              </button>
+
+              <button
+                onClick={() => { setActiveSim('yoyo'); sound.playBeep(500, 0.05); }}
+                className={`flex items-center gap-1.5 px-3.5 py-2 rounded-lg border whitespace-nowrap transition-all ${
+                  activeSim === 'yoyo'
+                    ? 'bg-amber-950 border-amber-400 text-amber-200 font-bold shadow'
+                    : 'bg-slate-950/60 border-slate-800 text-slate-400 hover:border-slate-700'
+                }`}
+              >
+                <Zap className="w-4 h-4 text-amber-400" />
+                <span>YO-YO</span>
+              </button>
+
+              <button
+                onClick={() => { setActiveSim('ghostrider'); sound.playBeep(500, 0.05); }}
+                className={`flex items-center gap-1.5 px-3.5 py-2 rounded-lg border whitespace-nowrap transition-all ${
+                  activeSim === 'ghostrider'
+                    ? 'bg-red-950 border-red-400 text-red-200 font-bold shadow'
+                    : 'bg-slate-950/60 border-slate-800 text-slate-400 hover:border-slate-700'
+                }`}
+              >
+                <Flame className="w-4 h-4 text-red-400" />
+                <span>GHOST RIDER</span>
+              </button>
+
+              <button
+                onClick={() => { setActiveSim('bobbi'); sound.playBeep(500, 0.05); }}
+                className={`flex items-center gap-1.5 px-3.5 py-2 rounded-lg border whitespace-nowrap transition-all ${
+                  activeSim === 'bobbi'
+                    ? 'bg-sky-950 border-sky-400 text-sky-200 font-bold shadow'
+                    : 'bg-slate-950/60 border-slate-800 text-slate-400 hover:border-slate-700'
+                }`}
+              >
+                <Swords className="w-4 h-4 text-cyan-400" />
+                <span>BOBBI</span>
+              </button>
+
+              <button
+                onClick={() => { setActiveSim('deke'); sound.playBeep(500, 0.05); }}
+                className={`flex items-center gap-1.5 px-3.5 py-2 rounded-lg border whitespace-nowrap transition-all ${
+                  activeSim === 'deke'
+                    ? 'bg-purple-950 border-purple-400 text-purple-200 font-bold shadow'
+                    : 'bg-slate-950/60 border-slate-800 text-slate-400 hover:border-slate-700'
+                }`}
+              >
+                <Music className="w-4 h-4 text-purple-400" />
+                <span>DEKE SHAW</span>
+              </button>
+
+              <button
+                onClick={() => { setActiveSim('enoch'); sound.playBeep(500, 0.05); }}
+                className={`flex items-center gap-1.5 px-3.5 py-2 rounded-lg border whitespace-nowrap transition-all ${
+                  activeSim === 'enoch'
+                    ? 'bg-amber-950 border-amber-400 text-amber-200 font-bold shadow'
+                    : 'bg-slate-950/60 border-slate-800 text-slate-400 hover:border-slate-700'
+                }`}
+              >
+                <Sparkles className="w-4 h-4 text-yellow-400" />
+                <span>ENOCH</span>
               </button>
             </div>
 
@@ -408,7 +563,35 @@ export const App: React.FC = () => {
               />
             )}
             {activeSim === 'mack' && <ShotgunAxeSimulator />}
+            {activeSim === 'yoyo' && <YoYoSimulator />}
+            {activeSim === 'ghostrider' && <GhostRiderSimulator />}
+            {activeSim === 'bobbi' && <BobbiCombatSimulator />}
+            {activeSim === 'deke' && <DekeSynthSimulator />}
+            {activeSim === 'enoch' && <EnochTimeLoopSimulator />}
           </div>
+        )}
+
+        {/* Tab: World Map & 0-8-4 Threat Radar */}
+        {activeTab === 'worldmap' && (
+          <ZephyrWorldMap onAwardXp={handleAwardXp} />
+        )}
+
+        {/* Tab: Strike Team Squad Builder & Battle Arena */}
+        {activeTab === 'battles' && (
+          <StrikeTeamBattle
+            characters={CHARACTERS_DATA}
+            onAwardXp={handleAwardXp}
+          />
+        )}
+
+        {/* Tab: Classified 0-8-4 Artifact Vault */}
+        {activeTab === 'artifacts' && (
+          <ArtifactArchive />
+        )}
+
+        {/* Tab: Soundboard & Audio Ambience */}
+        {activeTab === 'soundboard' && (
+          <SoundboardTerminal />
         )}
 
         {/* Tab 3: Iconic Fan Moments Hub */}
@@ -432,6 +615,13 @@ export const App: React.FC = () => {
             onFindEasterEgg={handleFindEasterEgg}
           />
         )}
+
+        {/* Framework Alternate Reality Fullscreen Simulation Overlay */}
+        <FrameworkOverlay
+          characters={CHARACTERS_DATA}
+          isActive={isFrameworkMode}
+          onToggle={() => setIsFrameworkMode(false)}
+        />
       </main>
 
       {/* S.H.I.E.L.D. Protocol Tactical Footer */}
