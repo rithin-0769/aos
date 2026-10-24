@@ -939,6 +939,8 @@ export const CHARACTERS_DATA: CharacterDossier[] = [
         techRating: 100,
         specialRating: 95,
         specialLabel: "30,000 Year Cosmic Perspective",
+        tacticalNotes: "Possesses total recall of the timeline stream; engineered the Zephyr-One Time Drive.",
+        primaryWeapon: "Electrochron Bio-Electric Discharge"
       }
     ]
   },

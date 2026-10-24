@@ -22,6 +22,7 @@ export const QuakeSimulator: React.FC = () => {
   const [shaking, setShaking] = useState<boolean>(false);
   const shockwavesRef = useRef<Shockwave[]>([]);
   const chargeIntervalRef = useRef<number | null>(null);
+  const chargePowerRef = useRef<number>(0);
 
   // Canvas loop
   useEffect(() => {
@@ -132,6 +133,7 @@ export const QuakeSimulator: React.FC = () => {
 
   const handlePointerDown = (e: React.PointerEvent<HTMLCanvasElement>) => {
     setIsCharging(true);
+    chargePowerRef.current = 10;
     setChargePower(10);
     const clientX = e.clientX;
     const clientY = e.clientY;
@@ -139,21 +141,20 @@ export const QuakeSimulator: React.FC = () => {
     sound.playBeep(220, 0.1, 'sine');
 
     chargeIntervalRef.current = window.setInterval(() => {
-      setChargePower((prev) => {
-        const next = Math.min(100, prev + 8);
-        sound.playBeep(200 + next * 6, 0.05, 'triangle');
-        return next;
-      });
+      chargePowerRef.current = Math.min(100, chargePowerRef.current + 8);
+      setChargePower(chargePowerRef.current);
+      sound.playBeep(200 + chargePowerRef.current * 6, 0.05, 'triangle');
     }, 100);
 
-    // If tapped quickly
     const onPointerUp = () => {
       if (chargeIntervalRef.current) {
         clearInterval(chargeIntervalRef.current);
         chargeIntervalRef.current = null;
       }
       setIsCharging(false);
-      triggerShockwave(clientX, clientY, Math.max(1, chargePower / 30));
+      const finalPower = chargePowerRef.current;
+      triggerShockwave(clientX, clientY, Math.max(1, finalPower / 30));
+      chargePowerRef.current = 0;
       setChargePower(0);
       window.removeEventListener('pointerup', onPointerUp);
     };

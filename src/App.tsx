@@ -27,7 +27,6 @@ import { CharacterShowcase } from './components/CharacterShowcase';
 import { ZephyrWorldMap } from './components/ZephyrWorldMap';
 import { StrikeTeamBattle } from './components/StrikeTeamBattle';
 import { ArtifactArchive } from './components/ArtifactArchive';
-import { SoundboardTerminal } from './components/SoundboardTerminal';
 import { FrameworkOverlay } from './components/FrameworkOverlay';
 
 // Icons
@@ -51,13 +50,13 @@ import {
   Music,
   BookOpen,
   Terminal,
-  Headphones
+  Zap
 } from 'lucide-react';
 
 export const App: React.FC = () => {
   // Navigation & Timeline State
   const [activeTab, setActiveTab] = useState<
-    'showcase' | 'timeline' | 'simulators' | 'moments' | 'clearance' | 'worldmap' | 'battles' | 'artifacts' | 'soundboard'
+    'showcase' | 'timeline' | 'simulators' | 'moments' | 'clearance' | 'worldmap' | 'battles' | 'artifacts'
   >('showcase');
   const [isFrameworkMode, setIsFrameworkMode] = useState<boolean>(false);
   const [currentSeason, setCurrentSeason] = useState<SeasonNumber>(1);
@@ -95,6 +94,11 @@ export const App: React.FC = () => {
   useEffect(() => {
     safeSaveToLocalStorage('shield_user_profile', userProfile);
   }, [userProfile]);
+
+  // Ensure any ambient loops are shut down
+  useEffect(() => {
+    sound.stopAmbient();
+  }, []);
 
   const activeSeasonData = SEASONS_DATA.find((s) => s.number === currentSeason) || SEASONS_DATA[0];
 
@@ -337,18 +341,6 @@ export const App: React.FC = () => {
           </button>
 
           <button
-            onClick={() => { setActiveTab('soundboard'); sound.playBeep(480, 0.04); }}
-            className={`flex items-center gap-1.5 px-3 py-2 rounded-lg whitespace-nowrap transition-all ${
-              activeTab === 'soundboard'
-                ? 'bg-purple-600 text-white font-bold shadow-md shadow-purple-600/30'
-                : 'text-slate-400 hover:text-white hover:bg-slate-900'
-            }`}
-          >
-            <Headphones className="w-4 h-4 text-purple-300" />
-            <span>SOUNDBOARD</span>
-          </button>
-
-          <button
             onClick={() => { setActiveTab('moments'); sound.playBeep(480, 0.04); }}
             className={`flex items-center gap-1.5 px-3 py-2 rounded-lg whitespace-nowrap transition-all ${
               activeTab === 'moments'
@@ -587,11 +579,6 @@ export const App: React.FC = () => {
         {/* Tab: Classified 0-8-4 Artifact Vault */}
         {activeTab === 'artifacts' && (
           <ArtifactArchive />
-        )}
-
-        {/* Tab: Soundboard & Audio Ambience */}
-        {activeTab === 'soundboard' && (
-          <SoundboardTerminal />
         )}
 
         {/* Tab 3: Iconic Fan Moments Hub */}

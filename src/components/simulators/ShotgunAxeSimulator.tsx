@@ -24,8 +24,11 @@ export const ShotgunAxeSimulator: React.FC = () => {
   };
 
   const toggleBlade = () => {
-    setBladeAttached(prev => !prev);
-    sound.playBeep(prev => !prev ? 750 : 350, 0.08);
+    setBladeAttached(prev => {
+      const next = !prev;
+      sound.playBeep(next ? 750 : 350, 0.08);
+      return next;
+    });
   };
 
   return (

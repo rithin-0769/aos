@@ -156,14 +156,3 @@ export interface BattleEnemy {
   avatarIcon: string;
 }
 
-export interface SoundboardQuote {
-  id: string;
-  speaker: string;
-  quote: string;
-  context: string;
-  season: SeasonNumber;
-  tag: string;
-  synthPitch: number;
-  synthSpeed: number;
-}
-
