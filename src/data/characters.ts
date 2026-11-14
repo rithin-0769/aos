@@ -804,7 +804,6 @@ export const CHARACTERS_DATA: CharacterDossier[] = [
     name: "Grant Ward / Hive",
     actor: "Brett Dalton",
     origin: "Massachusetts / Garrett Disciple",
-    heroSimulatorId: "ghostrider", // Can duel or inspect
     avatarSeed: "ward",
     imageUrl: "/images/ward.webp",
     quote: "Hail Hydra.",
@@ -889,7 +888,7 @@ export const CHARACTERS_DATA: CharacterDossier[] = [
     name: "Enoch Coltrane",
     actor: "Joel Stoffer",
     origin: "Chrona (Chronicom Anthropologist)",
-    heroSimulatorId: "fitzsimmons",
+    heroSimulatorId: "enoch",
     avatarSeed: "enoch",
     quote: "As I have always been.",
     audioClipText: "I have lived for over thirty thousand years. And you are my best friends.",

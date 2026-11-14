@@ -367,16 +367,40 @@ export const ClearanceSystem: React.FC<ClearanceSystemProps> = ({
       ctx.fillText('SSR-AUTH-SECURITY-BARCODE // ENCRYPTED TRISKELION CHIP', 80, 810);
 
       // Download Trigger
-      const dataUrl = canvas.toDataURL('image/png');
-      const a = document.createElement('a');
-      a.href = dataUrl;
-      a.download = `SHIELD_CREDENTIAL_${userProfile.agentName.replace(/\s+/g, '_').toUpperCase()}.png`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      sound.playClearancePromotion();
-    } catch (e) {
+      try {
+        const dataUrl = canvas.toDataURL('image/png');
+        const a = document.createElement('a');
+        a.href = dataUrl;
+        a.download = `SHIELD_CREDENTIAL_${userProfile.agentName.replace(/\s+/g, '_').toUpperCase()}.png`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        sound.playClearancePromotion();
+      } catch (taintErr) {
+        console.warn('Canvas tainted by external image origin. Exporting badge without external image:', taintErr);
+        // Fallback: clear the photo slot with tactical placeholder and retry
+        ctx.fillStyle = '#0f172a';
+        ctx.fillRect(60, 160, 280, 340);
+        ctx.strokeStyle = '#38bdf8';
+        ctx.lineWidth = 4;
+        ctx.strokeRect(60, 160, 280, 340);
+        ctx.fillStyle = '#38bdf8';
+        ctx.font = 'bold 24px monospace';
+        ctx.fillText('AGENT RECORD', 110, 340);
+
+        const safeDataUrl = canvas.toDataURL('image/png');
+        const a = document.createElement('a');
+        a.href = safeDataUrl;
+        a.download = `SHIELD_CREDENTIAL_${userProfile.agentName.replace(/\s+/g, '_').toUpperCase()}.png`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        sound.playClearancePromotion();
+      }
+    } catch (e: any) {
       console.error('Badge export failed:', e);
+      setUploadError(e?.message || 'Could not export badge. Please try again.');
+      sound.playGlitch();
     } finally {
       setIsExportingBadge(false);
     }

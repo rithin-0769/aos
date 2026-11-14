@@ -52,7 +52,10 @@ export const MomentsHub: React.FC<MomentsHubProps> = ({
 
   const getRandomQuote = () => {
     const pool = spoilerSafeMode ? moments.filter(m => m.season <= currentSeason) : moments;
-    const random = pool[Math.floor(Math.random() * pool.length)];
+    const effectivePool = pool.length > 0 ? pool : moments;
+    if (effectivePool.length === 0) return;
+    const random = effectivePool[Math.floor(Math.random() * effectivePool.length)];
+    if (!random) return;
     setDailyQuote(random);
     sound.playBeep(720, 0.06);
     sound.speakQuote(random.quote);

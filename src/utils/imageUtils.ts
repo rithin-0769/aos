@@ -10,13 +10,18 @@ export interface ProcessedImageResult {
 
 export const processImageFile = (
   file: File,
-  maxWidth = 400,
-  maxHeight = 480,
-  quality = 0.85
+  maxWidth = 320,
+  maxHeight = 380,
+  quality = 0.8
 ): Promise<ProcessedImageResult> => {
   return new Promise((resolve, reject) => {
-    if (!file.type.startsWith('image/')) {
-      reject(new Error('Selected file is not an image.'));
+    // Check MIME type or filename extension for robust Windows file support
+    const isImage =
+      (file.type && file.type.startsWith('image/')) ||
+      /\.(jpe?g|png|webp|gif|bmp|svg|jfif|heic|avif)$/i.test(file.name);
+
+    if (!isImage) {
+      reject(new Error('Selected file is not a supported image format (JPEG, PNG, WebP).'));
       return;
     }
 
@@ -37,8 +42,8 @@ export const processImageFile = (
 
       // Render to canvas
       const canvas = document.createElement('canvas');
-      canvas.width = width;
-      canvas.height = height;
+      canvas.width = Math.max(width, 1);
+      canvas.height = Math.max(height, 1);
 
       const ctx = canvas.getContext('2d');
       if (!ctx) {
@@ -65,7 +70,7 @@ export const processImageFile = (
 
     img.onerror = () => {
       URL.revokeObjectURL(objectUrl);
-      reject(new Error('Failed to load and decode image file.'));
+      reject(new Error('Failed to decode image file. Please try another image.'));
     };
 
     img.src = objectUrl;
@@ -79,8 +84,18 @@ export const safeSaveToLocalStorage = (key: string, value: unknown): boolean => 
     localStorage.setItem(key, stringified);
     return true;
   } catch (err) {
-    console.warn(`Failed to save to localStorage for key "${key}":`, err);
-    // If quota exceeded, try to clear large cached items or warn
+    console.warn(`Initial localStorage save failed for key "${key}":`, err);
+    // If saving with large avatarUrl exceeded quota, attempt recovery without avatarUrl
+    if (typeof value === 'object' && value !== null && 'avatarUrl' in value) {
+      try {
+        const strippedValue = { ...(value as Record<string, unknown>), avatarUrl: undefined };
+        localStorage.setItem(key, JSON.stringify(strippedValue));
+        console.warn(`Saved fallback profile without avatarUrl due to browser storage limits.`);
+        return true;
+      } catch (fallbackErr) {
+        console.error(`Critical localStorage write failure:`, fallbackErr);
+      }
+    }
     return false;
   }
 };

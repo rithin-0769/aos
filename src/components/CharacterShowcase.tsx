@@ -233,8 +233,8 @@ export const CharacterShowcase: React.FC<CharacterShowcaseProps> = ({
               </div>
             </div>
 
-            {/* Set as ID Badge Action Button */}
-            <div className="mt-4 flex gap-2">
+            {/* Set as ID Badge & Quick Action Buttons */}
+            <div className="mt-4 flex flex-wrap gap-2">
               <button
                 onClick={handleSetBadgePhoto}
                 className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-mono-tech transition-all ${
@@ -249,6 +249,30 @@ export const CharacterShowcase: React.FC<CharacterShowcaseProps> = ({
                     ? 'CURRENT ID BADGE PHOTO'
                     : 'SET AS MY ID BADGE PHOTO'}
                 </span>
+              </button>
+
+              <button
+                onClick={() => {
+                  onNavigateTab('timeline');
+                  sound.playBeep(520, 0.05);
+                }}
+                className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-mono-tech bg-slate-900 hover:bg-slate-850 border border-slate-700 text-slate-300 hover:text-white transition-colors"
+                title="View full evolving dossier across seasons 1 to 7"
+              >
+                <Clock className="w-3.5 h-3.5 text-sky-400" />
+                <span>VIEW IN TIMELINE</span>
+              </button>
+
+              <button
+                onClick={() => {
+                  onNavigateTab('clearance');
+                  sound.playBeep(520, 0.05);
+                }}
+                className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-mono-tech bg-slate-900 hover:bg-slate-850 border border-slate-700 text-slate-300 hover:text-white transition-colors"
+                title="Open S.H.I.E.L.D. ID Badge and Academy exams"
+              >
+                <Award className="w-3.5 h-3.5 text-amber-400" />
+                <span>CUSTOMIZE BADGE</span>
               </button>
             </div>
           </div>
