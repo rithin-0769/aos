@@ -207,11 +207,19 @@ export const App: React.FC = () => {
 
   return (
     <div
-      className={`min-h-screen text-slate-100 flex flex-col transition-colors duration-700 ${getThemeClass()}`}
-      style={{
-        backgroundColor: activeSeasonData.themeColors.background
-      }}
+      className={`min-h-screen text-slate-100 flex flex-col transition-colors duration-700 tactical-war-room-bg tactical-vignette relative ${getThemeClass()}`}
     >
+      {/* S.H.I.E.L.D. Archival Eagle Watermark */}
+      <div className="shield-bg-watermark" />
+
+      {/* Season Color Ambience Overlay */}
+      <div
+        className="fixed inset-0 pointer-events-none transition-colors duration-700 opacity-20 z-0"
+        style={{
+          backgroundColor: activeSeasonData.themeColors.background
+        }}
+      />
+
       {/* Top Secret Classification Caution Tape Banner */}
       <div className="caution-tape py-1 px-4 text-center overflow-hidden border-b-2 border-amber-600/80 shadow-md relative z-50">
         <div className="flex items-center justify-center gap-4 text-[10px] font-typewriter font-bold tracking-[0.25em] text-slate-950 uppercase select-none">
