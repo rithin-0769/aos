@@ -212,13 +212,27 @@ export const App: React.FC = () => {
         backgroundColor: activeSeasonData.themeColors.background
       }}
     >
-      {/* Top Tactical Command Header */}
-      <header className="border-b border-slate-800/80 bg-slate-950/80 backdrop-blur-md sticky top-0 z-50">
+      {/* Top Secret Classification Caution Tape Banner */}
+      <div className="caution-tape py-1 px-4 text-center overflow-hidden border-b-2 border-amber-600/80 shadow-md relative z-50">
+        <div className="flex items-center justify-center gap-4 text-[10px] font-typewriter font-bold tracking-[0.25em] text-slate-950 uppercase select-none">
+          <span>★ TOP SECRET // EYES ONLY ★</span>
+          <span className="hidden md:inline">STRATEGIC SCIENTIFIC RESERVE // S.H.I.E.L.D. RESTRICTED ARCHIVES</span>
+          <span className="hidden sm:inline">UNAUTHORIZED DECRYPTION PROHIBITED UNDER TREASON ACT</span>
+          <span>★ TOP SECRET // EYES ONLY ★</span>
+        </div>
+      </div>
+
+      {/* Top Tactical Command Header (SSR Dispatch Briefcase) */}
+      <header className="border-b-2 border-amber-900/80 bg-[#0e131d] shadow-2xl sticky top-0 z-40 relative">
+        {/* Brass corner rivets */}
+        <div className="brass-rivet top-2 left-2" />
+        <div className="brass-rivet top-2 right-2" />
+
         <div className="max-w-7xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-3">
           {/* Logo & Operational Status */}
           <div className="flex items-center gap-3">
             <div
-              className="w-10 h-10 rounded-xl flex items-center justify-center shadow-lg border transition-all duration-500"
+              className="w-10 h-10 rounded-xl flex items-center justify-center shadow-lg border-2 transition-all duration-500"
               style={{
                 backgroundColor: activeSeasonData.themeColors.badgeBg,
                 borderColor: activeSeasonData.themeColors.primary,
@@ -229,11 +243,11 @@ export const App: React.FC = () => {
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h1 className="font-heading font-black text-lg tracking-wider text-white">
+                <h1 className="font-typewriter font-bold text-lg tracking-wider text-amber-100">
                   S.H.I.E.L.D. PROTOCOL
                 </h1>
                 <span
-                  className="px-2 py-0.5 rounded text-[10px] font-mono-tech font-bold uppercase transition-colors"
+                  className="px-2 py-0.5 rounded text-[10px] font-typewriter font-bold uppercase transition-colors"
                   style={{
                     backgroundColor: activeSeasonData.themeColors.badgeBg,
                     color: activeSeasonData.themeColors.accent,
@@ -242,18 +256,21 @@ export const App: React.FC = () => {
                 >
                   S0{currentSeason} // {activeSeasonData.codename}
                 </span>
+                <span className="rubber-stamp hidden sm:inline-block text-[8px] py-0 px-1.5">
+                  SSR DISPATCH
+                </span>
               </div>
-              <p className="text-[11px] font-mono-tech text-slate-400">
+              <p className="text-[11px] font-courier text-amber-200/80">
                 STRATEGIC HOMELAND INTERVENTION ENFORCEMENT & LOGISTICS DIVISION
               </p>
             </div>
           </div>
 
           {/* Quick Metrics & Sound Toggle */}
-          <div className="flex items-center gap-2 sm:gap-3 text-xs font-mono-tech">
+          <div className="flex items-center gap-2 sm:gap-3 text-xs font-courier">
             {/* Quick Era Switcher Bar accessible across all tabs */}
-            <div className="flex items-center gap-0.5 bg-slate-900/90 p-1 rounded-lg border border-slate-700/80">
-              <span className="text-slate-400 text-[10px] px-1 hidden md:inline font-bold">ERA:</span>
+            <div className="flex items-center gap-0.5 bg-black/80 p-1 rounded-lg border border-amber-800/80">
+              <span className="text-amber-400 text-[10px] px-1 hidden md:inline font-bold font-typewriter">ERA:</span>
               {([1, 2, 3, 4, 5, 6, 7] as SeasonNumber[]).map((s) => (
                 <button
                   key={s}
@@ -262,10 +279,10 @@ export const App: React.FC = () => {
                     if (s === 4) sound.playGlitch();
                     else sound.playBeep(320 + s * 70, 0.05);
                   }}
-                  className={`px-2 py-1 rounded text-[11px] font-bold transition-all ${
+                  className={`px-2 py-1 rounded text-[11px] font-bold font-typewriter transition-all ${
                     currentSeason === s
-                      ? 'bg-sky-600 text-white shadow-md shadow-sky-600/40 scale-105'
-                      : 'text-slate-400 hover:text-white hover:bg-slate-800'
+                      ? 'bg-amber-600 text-slate-950 shadow-md shadow-amber-600/40 scale-105'
+                      : 'text-amber-400/80 hover:text-white hover:bg-slate-800'
                   }`}
                   title={`Jump timeline to Season 0${s}`}
                 >
@@ -280,7 +297,7 @@ export const App: React.FC = () => {
                 sound.playGlitch();
                 setIsFrameworkMode(true);
               }}
-              className="px-2.5 py-1.5 rounded-lg text-xs font-mono-tech font-bold bg-emerald-950/90 hover:bg-emerald-900 border border-emerald-500 text-emerald-300 transition-all flex items-center gap-1.5 shadow-[0_0_12px_rgba(16,185,129,0.3)] animate-pulse"
+              className="px-2.5 py-1.5 rounded-lg text-xs font-typewriter font-bold bg-emerald-950/90 hover:bg-emerald-900 border border-emerald-500 text-emerald-300 transition-all flex items-center gap-1.5 shadow-[0_0_12px_rgba(16,185,129,0.3)] animate-pulse"
               title="Enter Madame Hydra's Framework Simulation"
             >
               <span className="text-sm">🐙</span>
@@ -293,11 +310,11 @@ export const App: React.FC = () => {
                 setActiveTab('clearance');
                 sound.playBeep(620, 0.05);
               }}
-              className="cursor-pointer bg-slate-900 hover:bg-slate-800 px-3 py-1.5 rounded-lg border border-slate-700 hover:border-sky-400 flex items-center gap-2 transition-all shadow-sm select-none"
+              className="cursor-pointer bg-black/80 hover:bg-slate-900 px-3 py-1.5 rounded-lg border border-amber-800/80 hover:border-amber-400 flex items-center gap-2 transition-all shadow-sm select-none"
               title="Inspect Clearance Profile, Custom ID Badge & Academy Exams"
             >
-              <span className="text-slate-400 hidden sm:inline">CLEARANCE:</span>
-              <span className={`font-bold ${userProfile.clearanceLevel >= 7 ? 'text-amber-400' : 'text-sky-400'}`}>
+              <span className="text-amber-400 hidden sm:inline font-typewriter">CLEARANCE:</span>
+              <span className={`font-bold font-typewriter ${userProfile.clearanceLevel >= 7 ? 'text-amber-400' : 'text-amber-200'}`}>
                 {userProfile.clearanceLevel >= 7 ? 'DIRECTOR' : `L0${userProfile.clearanceLevel}`}
               </span>
             </button>
@@ -305,30 +322,28 @@ export const App: React.FC = () => {
             {/* Audio Mute/Unmute */}
             <button
               onClick={handleToggleMute}
-              className="p-2 rounded-lg bg-slate-900 border border-slate-700 text-slate-300 hover:text-white transition-colors"
+              className="p-2 rounded-lg bg-black/80 border border-amber-800/80 text-amber-300 hover:text-white transition-colors"
               title={isMuted ? 'Unmute tactical audio' : 'Mute tactical audio'}
             >
-              {isMuted ? <VolumeX className="w-4 h-4 text-red-400" /> : <Volume2 className="w-4 h-4 text-sky-400" />}
+              {isMuted ? <VolumeX className="w-4 h-4 text-red-400" /> : <Volume2 className="w-4 h-4 text-amber-400" />}
             </button>
           </div>
         </div>
 
-        {/* Mission Briefcase Folder Tabs Navigation Bar */}
-        <div className="border-t border-slate-800/80 bg-slate-950/95 backdrop-blur-md pt-2 px-2 shadow-inner">
+        {/* Mission Briefcase Manila Folder Tabs Navigation Bar */}
+        <div className="border-t border-amber-900/60 bg-[#121824] pt-2 px-2 shadow-inner">
           <nav className="max-w-7xl mx-auto px-2 flex gap-1 sm:gap-1.5 overflow-x-auto pb-0 scrollbar-none text-xs font-courier items-end">
             <button
               onClick={() => { setActiveTab('showcase'); sound.playBeep(480, 0.04); }}
-              className={`dossier-tab flex flex-col items-start px-3.5 py-2 whitespace-nowrap transition-all border border-b-0 ${
-                activeTab === 'showcase'
-                  ? 'dossier-tab-active text-sky-200 border-sky-400/80'
-                  : 'bg-slate-900/60 border-slate-800 text-slate-400 hover:text-white hover:bg-slate-850'
+              className={`manila-tab flex flex-col items-start px-3.5 py-2 whitespace-nowrap transition-all border border-b-0 ${
+                activeTab === 'showcase' ? 'manila-tab-active' : ''
               }`}
             >
-              <span className="text-[9px] text-slate-500 font-bold uppercase tracking-widest flex items-center gap-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-sky-400" />
-                FILE-01
+              <span className="text-[9px] text-amber-500/90 font-typewriter font-bold uppercase tracking-widest flex items-center gap-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
+                TAB-01
               </span>
-              <span className="font-heading font-bold text-xs flex items-center gap-1.5 mt-0.5">
+              <span className="font-typewriter font-bold text-xs flex items-center gap-1.5 mt-0.5">
                 <Sparkles className="w-3.5 h-3.5 text-amber-400" />
                 HERO SPOTLIGHT
               </span>
@@ -336,17 +351,15 @@ export const App: React.FC = () => {
 
             <button
               onClick={() => { setActiveTab('worldmap'); sound.playBeep(480, 0.04); }}
-              className={`dossier-tab flex flex-col items-start px-3.5 py-2 whitespace-nowrap transition-all border border-b-0 ${
-                activeTab === 'worldmap'
-                  ? 'dossier-tab-active text-cyan-200 border-cyan-400/80'
-                  : 'bg-slate-900/60 border-slate-800 text-slate-400 hover:text-white hover:bg-slate-850'
+              className={`manila-tab flex flex-col items-start px-3.5 py-2 whitespace-nowrap transition-all border border-b-0 ${
+                activeTab === 'worldmap' ? 'manila-tab-active' : ''
               }`}
             >
-              <span className="text-[9px] text-slate-500 font-bold uppercase tracking-widest flex items-center gap-1">
+              <span className="text-[9px] text-amber-500/90 font-typewriter font-bold uppercase tracking-widest flex items-center gap-1">
                 <span className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
-                RAD-02
+                TAB-02
               </span>
-              <span className="font-heading font-bold text-xs flex items-center gap-1.5 mt-0.5">
+              <span className="font-typewriter font-bold text-xs flex items-center gap-1.5 mt-0.5">
                 <Globe className="w-3.5 h-3.5 text-cyan-300" />
                 WORLD RADAR
               </span>
@@ -354,17 +367,15 @@ export const App: React.FC = () => {
 
             <button
               onClick={() => { setActiveTab('battles'); sound.playBeep(480, 0.04); }}
-              className={`dossier-tab flex flex-col items-start px-3.5 py-2 whitespace-nowrap transition-all border border-b-0 ${
-                activeTab === 'battles'
-                  ? 'dossier-tab-active text-red-200 border-red-500/80'
-                  : 'bg-slate-900/60 border-slate-800 text-slate-400 hover:text-white hover:bg-slate-850'
+              className={`manila-tab flex flex-col items-start px-3.5 py-2 whitespace-nowrap transition-all border border-b-0 ${
+                activeTab === 'battles' ? 'manila-tab-active' : ''
               }`}
             >
-              <span className="text-[9px] text-slate-500 font-bold uppercase tracking-widest flex items-center gap-1">
+              <span className="text-[9px] text-amber-500/90 font-typewriter font-bold uppercase tracking-widest flex items-center gap-1">
                 <span className="w-1.5 h-1.5 rounded-full bg-red-400" />
-                STR-03
+                TAB-03
               </span>
-              <span className="font-heading font-bold text-xs flex items-center gap-1.5 mt-0.5">
+              <span className="font-typewriter font-bold text-xs flex items-center gap-1.5 mt-0.5">
                 <Swords className="w-3.5 h-3.5 text-rose-300" />
                 STRIKE ARENA
               </span>
@@ -372,17 +383,15 @@ export const App: React.FC = () => {
 
             <button
               onClick={() => { setActiveTab('artifacts'); sound.playBeep(480, 0.04); }}
-              className={`dossier-tab flex flex-col items-start px-3.5 py-2 whitespace-nowrap transition-all border border-b-0 ${
-                activeTab === 'artifacts'
-                  ? 'dossier-tab-active text-amber-200 border-amber-500/80'
-                  : 'bg-slate-900/60 border-slate-800 text-slate-400 hover:text-white hover:bg-slate-850'
+              className={`manila-tab flex flex-col items-start px-3.5 py-2 whitespace-nowrap transition-all border border-b-0 ${
+                activeTab === 'artifacts' ? 'manila-tab-active' : ''
               }`}
             >
-              <span className="text-[9px] text-slate-500 font-bold uppercase tracking-widest flex items-center gap-1">
+              <span className="text-[9px] text-amber-500/90 font-typewriter font-bold uppercase tracking-widest flex items-center gap-1">
                 <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
-                084-SEC
+                TAB-04
               </span>
-              <span className="font-heading font-bold text-xs flex items-center gap-1.5 mt-0.5">
+              <span className="font-typewriter font-bold text-xs flex items-center gap-1.5 mt-0.5">
                 <BookOpen className="w-3.5 h-3.5 text-amber-300" />
                 0-8-4 ARTIFACTS
               </span>
@@ -390,94 +399,84 @@ export const App: React.FC = () => {
 
             <button
               onClick={() => { setActiveTab('timeline'); sound.playBeep(480, 0.04); }}
-              className={`dossier-tab flex flex-col items-start px-3.5 py-2 whitespace-nowrap transition-all border border-b-0 ${
-                activeTab === 'timeline'
-                  ? 'dossier-tab-active text-sky-200 border-sky-400/80'
-                  : 'bg-slate-900/60 border-slate-800 text-slate-400 hover:text-white hover:bg-slate-850'
+              className={`manila-tab flex flex-col items-start px-3.5 py-2 whitespace-nowrap transition-all border border-b-0 ${
+                activeTab === 'timeline' ? 'manila-tab-active' : ''
               }`}
             >
-              <span className="text-[9px] text-slate-500 font-bold uppercase tracking-widest flex items-center gap-1">
+              <span className="text-[9px] text-amber-500/90 font-typewriter font-bold uppercase tracking-widest flex items-center gap-1">
                 <span className="w-1.5 h-1.5 rounded-full bg-sky-400" />
-                S1-S7
+                TAB-05
               </span>
-              <span className="font-heading font-bold text-xs flex items-center gap-1.5 mt-0.5">
+              <span className="font-typewriter font-bold text-xs flex items-center gap-1.5 mt-0.5">
                 <Radio className="w-3.5 h-3.5 text-sky-400" />
-                TIMELINE
+                TIMELINE ARCHIVE
               </span>
             </button>
 
             <button
               onClick={() => { setActiveTab('simulators'); sound.playBeep(480, 0.04); }}
-              className={`dossier-tab flex flex-col items-start px-3.5 py-2 whitespace-nowrap transition-all border border-b-0 ${
-                activeTab === 'simulators'
-                  ? 'dossier-tab-active text-purple-200 border-purple-400/80'
-                  : 'bg-slate-900/60 border-slate-800 text-slate-400 hover:text-white hover:bg-slate-850'
+              className={`manila-tab flex flex-col items-start px-3.5 py-2 whitespace-nowrap transition-all border border-b-0 ${
+                activeTab === 'simulators' ? 'manila-tab-active' : ''
               }`}
             >
-              <span className="text-[9px] text-slate-500 font-bold uppercase tracking-widest flex items-center gap-1">
+              <span className="text-[9px] text-amber-500/90 font-typewriter font-bold uppercase tracking-widest flex items-center gap-1">
                 <span className="w-1.5 h-1.5 rounded-full bg-purple-400" />
-                LAB-06
+                TAB-06
               </span>
-              <span className="font-heading font-bold text-xs flex items-center gap-1.5 mt-0.5">
+              <span className="font-typewriter font-bold text-xs flex items-center gap-1.5 mt-0.5">
                 <Activity className="w-3.5 h-3.5 text-purple-400" />
-                SIMULATORS
+                LAB SIMULATORS
               </span>
             </button>
 
             <button
               onClick={() => { setActiveTab('moments'); sound.playBeep(480, 0.04); }}
-              className={`dossier-tab flex flex-col items-start px-3.5 py-2 whitespace-nowrap transition-all border border-b-0 ${
-                activeTab === 'moments'
-                  ? 'dossier-tab-active text-emerald-200 border-emerald-400/80'
-                  : 'bg-slate-900/60 border-slate-800 text-slate-400 hover:text-white hover:bg-slate-850'
+              className={`manila-tab flex flex-col items-start px-3.5 py-2 whitespace-nowrap transition-all border border-b-0 ${
+                activeTab === 'moments' ? 'manila-tab-active' : ''
               }`}
             >
-              <span className="text-[9px] text-slate-500 font-bold uppercase tracking-widest flex items-center gap-1">
+              <span className="text-[9px] text-amber-500/90 font-typewriter font-bold uppercase tracking-widest flex items-center gap-1">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-                CANON-07
+                TAB-07
               </span>
-              <span className="font-heading font-bold text-xs flex items-center gap-1.5 mt-0.5">
+              <span className="font-typewriter font-bold text-xs flex items-center gap-1.5 mt-0.5">
                 <MessageSquareQuote className="w-3.5 h-3.5 text-emerald-300" />
-                FAN MOMENTS
+                CANON MOMENTS
               </span>
             </button>
 
             <button
               onClick={() => { setActiveTab('clearance'); sound.playBeep(480, 0.04); }}
-              className={`dossier-tab flex flex-col items-start px-3.5 py-2 whitespace-nowrap transition-all border border-b-0 ${
-                activeTab === 'clearance'
-                  ? 'dossier-tab-active text-sky-200 border-sky-400/80'
-                  : 'bg-slate-900/60 border-slate-800 text-slate-400 hover:text-white hover:bg-slate-850'
+              className={`manila-tab flex flex-col items-start px-3.5 py-2 whitespace-nowrap transition-all border border-b-0 ${
+                activeTab === 'clearance' ? 'manila-tab-active' : ''
               }`}
             >
-              <span className="text-[9px] text-slate-500 font-bold uppercase tracking-widest flex items-center gap-1">
+              <span className="text-[9px] text-amber-500/90 font-typewriter font-bold uppercase tracking-widest flex items-center gap-1">
                 <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
-                SEC-08
+                TAB-08
               </span>
-              <span className="font-heading font-bold text-xs flex items-center gap-1.5 mt-0.5">
+              <span className="font-typewriter font-bold text-xs flex items-center gap-1.5 mt-0.5">
                 <Award className="w-3.5 h-3.5 text-amber-400" />
-                ID BADGE & EXAM
+                ID BADGE & EXAMS
               </span>
             </button>
 
             {/* Visual Divider */}
-            <div className="h-8 w-px bg-slate-800 mx-1 self-center shrink-0 hidden sm:block" />
+            <div className="h-8 w-px bg-amber-800/60 mx-1 self-center shrink-0 hidden sm:block" />
 
             {/* Classified Briefcase / Games Folder Tab with Dropdown */}
             <div ref={gameMenuRef} className="relative flex items-end">
               <button
                 onClick={() => handleSelectGame(lastGameTab)}
-                className={`dossier-tab flex flex-col items-start px-3.5 py-2 whitespace-nowrap transition-all border border-b-0 ${
-                  isGameTab
-                    ? 'dossier-tab-active text-amber-200 border-amber-500/80 shadow-amber-500/20'
-                    : 'bg-slate-900/80 border-amber-500/40 text-amber-400 hover:text-amber-200 hover:bg-slate-850'
+                className={`manila-tab flex flex-col items-start px-3.5 py-2 whitespace-nowrap transition-all border border-b-0 ${
+                  isGameTab ? 'manila-tab-active shadow-amber-500/20' : ''
                 }`}
               >
                 <div className="flex items-center gap-1.5">
                   <span className="rubber-stamp-amber text-[8px] py-0 px-1">RESTRICTED</span>
-                  <span className="text-[9px] text-amber-500/80 font-bold">DOSSIER-09</span>
+                  <span className="text-[9px] text-amber-400 font-bold font-typewriter">TAB-09</span>
                 </div>
-                <div className="font-heading font-bold text-xs flex items-center gap-1.5 mt-0.5">
+                <div className="font-typewriter font-bold text-xs flex items-center gap-1.5 mt-0.5">
                   <Gamepad2 className="w-3.5 h-3.5 text-amber-400" />
                   <span>CLASSIFIED GAMES [7]</span>
                 </div>
@@ -488,7 +487,7 @@ export const App: React.FC = () => {
                 className={`p-1.5 mb-1 ml-1 rounded-lg border transition-all ${
                   showGameMenu
                     ? 'bg-amber-500 text-slate-950 border-amber-400'
-                    : 'bg-slate-900 border-slate-700 text-slate-400 hover:text-white'
+                    : 'bg-black border-amber-700/80 text-amber-400 hover:text-white'
                 }`}
                 title="Quick select mission"
               >
@@ -497,10 +496,10 @@ export const App: React.FC = () => {
 
             {/* Quick Game Selector Popover */}
             {showGameMenu && (
-              <div className="absolute top-full right-0 mt-2 w-64 bg-slate-950/95 border border-amber-500/40 rounded-2xl p-2 shadow-2xl backdrop-blur-xl z-50 space-y-1 animate-scale-up">
-                <div className="px-2 py-1 text-[10px] text-amber-400 font-bold uppercase tracking-wider border-b border-slate-800 mb-1 flex items-center justify-between">
+              <div className="absolute top-full right-0 mt-2 w-64 bg-[#140e06] border-2 border-amber-500/70 rounded-xl p-2 shadow-2xl backdrop-blur-xl z-50 space-y-1 animate-scale-up">
+                <div className="px-2 py-1 text-[10px] text-amber-400 font-bold font-typewriter uppercase tracking-wider border-b border-amber-800/80 mb-1 flex items-center justify-between">
                   <span>SEASON MISSIONS</span>
-                  <span className="text-[9px] text-slate-500">7 GAMES</span>
+                  <span className="text-[9px] text-amber-300">7 COLD WAR SUITES</span>
                 </div>
                 {[
                   { id: 'koenig' as const, name: 'Koenig Lie Detector', season: 'S01', icon: Zap, color: 'text-yellow-400' },
@@ -517,17 +516,17 @@ export const App: React.FC = () => {
                     <button
                       key={g.id}
                       onClick={() => handleSelectGame(g.id)}
-                      className={`w-full flex items-center justify-between px-2.5 py-1.5 rounded-xl text-left text-xs transition-all ${
+                      className={`w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg text-left text-xs font-typewriter transition-all ${
                         isCur
-                          ? 'bg-amber-500/20 text-white font-bold border border-amber-400/50'
-                          : 'text-slate-300 hover:bg-slate-900 hover:text-white'
+                          ? 'bg-amber-600 text-slate-950 font-bold border border-amber-400 shadow'
+                          : 'text-amber-200/80 hover:bg-black hover:text-white'
                       }`}
                     >
                       <div className="flex items-center gap-2">
                         <Icon className={`w-3.5 h-3.5 ${g.color}`} />
                         <span>{g.name}</span>
                       </div>
-                      <span className="text-[9px] px-1.5 py-0.5 rounded bg-slate-900 text-slate-400 font-bold">
+                      <span className="text-[9px] px-1.5 py-0.5 rounded bg-black text-amber-400 font-bold border border-amber-900/50">
                         {g.season}
                       </span>
                     </button>
