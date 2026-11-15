@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { CharacterDossier, CharacterEvolution, SeasonNumber } from '../types';
 import { sound } from '../utils/audio';
+import { RedactedIntel } from './RedactedIntel';
 import {
   Shield,
   Volume2,
@@ -151,21 +152,21 @@ export const DossierViewer: React.FC<DossierViewerProps> = ({
         })}
       </div>
 
-      {/* Main Dossier Card (SSR Classified Dossier Folder) */}
-      <div className="ssr-dossier-card p-4 sm:p-6 rounded-2xl border border-sky-900/60 bg-slate-950/90 backdrop-blur-md relative overflow-hidden shadow-2xl">
-        {/* Brass corner rivets */}
-        <div className="brass-rivet top-3 left-3" />
-        <div className="brass-rivet top-3 right-3" />
-        <div className="brass-rivet bottom-3 left-3" />
-        <div className="brass-rivet bottom-3 right-3" />
+      {/* Main Dossier Card (Tactical Glass HUD Terminal) */}
+      <div className="tactical-glass-hud p-4 sm:p-6 rounded-2xl relative overflow-hidden shadow-2xl">
+        {/* HUD Corner Brackets */}
+        <div className="hud-bracket-tl" />
+        <div className="hud-bracket-tr" />
+        <div className="hud-bracket-bl" />
+        <div className="hud-bracket-br" />
 
         {/* Vintage Top Secret Red Rubber Stamp */}
-        <div className="absolute top-4 right-14 z-20 rubber-stamp text-[11px] pointer-events-none select-none">
+        <div className="absolute top-4 right-14 z-20 rubber-stamp-cyan text-[11px] pointer-events-none select-none">
           TOP SECRET // S0{activeEvo.season}
         </div>
 
         {/* Background tactical watermark */}
-        <div className="absolute top-2 right-4 text-7xl font-mono-tech font-extrabold text-slate-900/30 select-none pointer-events-none">
+        <div className="absolute top-2 right-4 text-7xl font-mono-tech font-extrabold text-cyan-500/10 select-none pointer-events-none">
           LEVEL 0{activeEvo.clearanceLevel}
         </div>
 
@@ -275,21 +276,23 @@ export const DossierViewer: React.FC<DossierViewerProps> = ({
 
               {/* Status Badges */}
               <div className="space-y-1.5 text-xs font-mono-tech">
-                <div className="flex justify-between py-1 border-b border-slate-800">
-                  <span className="text-slate-500">TIMELINE ALIAS:</span>
-                  <span className="text-sky-300 font-bold">{activeEvo.alias}</span>
+                <div className="flex justify-between items-center py-1 border-b border-cyan-900/40">
+                  <span className="text-slate-400">TIMELINE ALIAS:</span>
+                  <RedactedIntel text={activeEvo.alias} classification="CLASSIFIED ALIAS" />
                 </div>
-                <div className="flex justify-between py-1 border-b border-slate-800">
-                  <span className="text-slate-500">CLEARANCE:</span>
-                  <span className="text-amber-400 font-bold">LEVEL {activeEvo.clearanceLevel}</span>
+                <div className="flex justify-between items-center py-1 border-b border-cyan-900/40">
+                  <span className="text-slate-400">CLEARANCE:</span>
+                  <span className="text-cyan-300 font-bold px-1.5 py-0.5 rounded bg-cyan-950/80 border border-cyan-500/50">
+                    LEVEL {activeEvo.clearanceLevel}
+                  </span>
                 </div>
-                <div className="flex justify-between py-1 border-b border-slate-800">
-                  <span className="text-slate-500">STATUS:</span>
+                <div className="flex justify-between items-center py-1 border-b border-cyan-900/40">
+                  <span className="text-slate-400">STATUS:</span>
                   <span className="text-emerald-400 font-bold">{activeEvo.status}</span>
                 </div>
-                <div className="flex justify-between py-1">
-                  <span className="text-slate-500">ALLEGIANCE:</span>
-                  <span className="text-slate-300 truncate max-w-[170px]">{activeEvo.allegiance}</span>
+                <div className="flex justify-between items-center py-1">
+                  <span className="text-slate-400">ALLEGIANCE:</span>
+                  <RedactedIntel text={activeEvo.allegiance} classification="SENSITIVE ALLEGIANCE" />
                 </div>
               </div>
             </div>

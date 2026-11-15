@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { CharacterDossier, SeasonNumber, UserProfile } from '../types';
 import { sound } from '../utils/audio';
+import { RedactedIntel } from './RedactedIntel';
 import { QuakeSimulator } from './simulators/QuakeSimulator';
 import { CoulsonSimulator } from './simulators/CoulsonSimulator';
 import { MayCombatSimulator } from './simulators/MayCombatSimulator';
@@ -168,16 +169,21 @@ export const CharacterShowcase: React.FC<CharacterShowcaseProps> = ({
 
   return (
     <div className="space-y-6">
-      {/* Evidence Drawer // Manila Dossier Tabs for Each Operative */}
-      <div className="p-3 bg-[#10141d] rounded-xl border-2 border-amber-800/60 shadow-lg flex flex-wrap items-center justify-between gap-3 relative">
+      {/* Evidence Drawer // Tactical Glass Selector Tabs for Each Operative */}
+      <div className="p-3 tactical-glass-hud rounded-xl border border-cyan-500/40 shadow-xl flex flex-wrap items-center justify-between gap-3 relative">
+        <div className="hud-bracket-tl" />
+        <div className="hud-bracket-tr" />
+        <div className="hud-bracket-bl" />
+        <div className="hud-bracket-br" />
+
         <div className="flex items-center gap-2">
-          <Shield className="w-5 h-5 text-amber-400 animate-pulse" />
-          <span className="font-typewriter font-bold text-xs sm:text-sm tracking-wider text-amber-200 uppercase">
-            SSR CLASSIFIED DOSSIER ARCHIVES // EVIDENCE DRAWER [7 AGENTS]
+          <Shield className="w-5 h-5 text-cyan-400 animate-pulse" />
+          <span className="font-heading font-black text-xs sm:text-sm tracking-wider text-white uppercase">
+            SSR VAULT 084 // TACTICAL OPERATIVE HUD [7 AGENTS]
           </span>
         </div>
 
-        {/* Manila Folder Tabs for Each Hero */}
+        {/* Glass Tabs for Each Hero */}
         <div className="flex gap-1.5 overflow-x-auto max-w-full pb-1 scrollbar-thin">
           {featuredCharacters.map((hero, idx) => {
             const isSelected = hero.id === activeHeroId;
@@ -185,19 +191,19 @@ export const CharacterShowcase: React.FC<CharacterShowcaseProps> = ({
               <button
                 key={hero.id}
                 onClick={() => handleSelectHero(hero.id)}
-                className={`manila-tab flex items-center gap-2 px-3 py-1.5 text-xs font-courier whitespace-nowrap transition-all ${
-                  isSelected ? 'manila-tab-active font-bold' : ''
+                className={`glass-tab flex items-center gap-2 px-3 py-1.5 text-xs font-mono-tech whitespace-nowrap transition-all ${
+                  isSelected ? 'glass-tab-active font-bold shadow-[0_0_12px_rgba(6,182,212,0.4)]' : ''
                 }`}
               >
                 {hero.imageUrl && (
                   <img
                     src={hero.imageUrl}
                     alt={hero.name}
-                    className="w-4 h-4 rounded-full object-cover border border-amber-400/50 shrink-0"
+                    className="w-4 h-4 rounded-full object-cover border border-cyan-400/60 shrink-0"
                   />
                 )}
-                <span className="font-typewriter text-[11px]">
-                  DOSSIER-0{idx + 1} // {hero.name.split(' ')[0].toUpperCase()}
+                <span className="text-[11px] font-mono-tech">
+                  AGENT-0{idx + 1} // {hero.name.split(' ')[0].toUpperCase()}
                 </span>
               </button>
             );
@@ -205,24 +211,21 @@ export const CharacterShowcase: React.FC<CharacterShowcaseProps> = ({
         </div>
       </div>
 
-      {/* Cinematic Hero Spotlight Dossier Folder */}
-      <div className="manila-folder-wrapper p-6 sm:p-8 rounded-2xl relative overflow-hidden shadow-[0_25px_60px_rgba(0,0,0,0.95)]">
-        {/* Brass corner rivets */}
-        <div className="brass-rivet top-3 left-3" />
-        <div className="brass-rivet top-3 right-3" />
-        <div className="brass-rivet bottom-3 left-3" />
-        <div className="brass-rivet bottom-3 right-3" />
+      {/* Cinematic Hero Spotlight Tactical Glass HUD Frame */}
+      <div className="tactical-glass-hud p-6 sm:p-8 rounded-2xl relative overflow-hidden shadow-[0_25px_60px_rgba(0,0,0,0.95)]">
+        {/* HUD Corner Brackets */}
+        <div className="hud-bracket-tl" />
+        <div className="hud-bracket-tr" />
+        <div className="hud-bracket-bl" />
+        <div className="hud-bracket-br" />
 
-        {/* Paperclip graphic */}
-        <div className="paperclip" />
-
-        {/* Vintage Top Secret Red Rubber Stamp */}
-        <div className="absolute top-4 right-14 z-30 rubber-stamp pointer-events-none select-none text-xs sm:text-sm">
-          TOP SECRET // EYES ONLY
+        {/* Top Secret Cyan Stamp */}
+        <div className="absolute top-4 right-14 z-30 rubber-stamp-cyan pointer-events-none select-none text-xs sm:text-sm">
+          RESTRICTED // EYES ONLY
         </div>
 
-        {/* Vintage Background Watermark */}
-        <div className="absolute top-0 right-0 p-8 text-9xl font-typewriter font-black text-amber-500/5 select-none pointer-events-none">
+        {/* Tactical Background Watermark */}
+        <div className="absolute top-0 right-0 p-8 text-9xl font-mono-tech font-black text-cyan-500/5 select-none pointer-events-none">
           {getWatermark(activeHero.id)}
         </div>
 
@@ -243,7 +246,7 @@ export const CharacterShowcase: React.FC<CharacterShowcaseProps> = ({
                   transform: `perspective(1000px) rotateX(${cardTilt.x}deg) rotateY(${cardTilt.y}deg)`,
                   transition: 'transform 0.15s ease-out'
                 }}
-                className="relative w-64 h-80 sm:w-72 sm:h-96 rounded-2xl overflow-hidden border-2 border-amber-500/80 bg-black shadow-2xl cursor-pointer hologram-shimmer"
+                className="relative w-64 h-80 sm:w-72 sm:h-96 rounded-2xl overflow-hidden border-2 border-cyan-400 bg-black shadow-[0_0_30px_rgba(6,182,212,0.3)] cursor-pointer hologram-shimmer"
               >
                 {/* Vintage Classified Red Rubber Stamp */}
                 <div className="absolute top-3 right-3 z-30 rubber-stamp text-[9px] pointer-events-none">
@@ -266,29 +269,29 @@ export const CharacterShowcase: React.FC<CharacterShowcaseProps> = ({
                 <div
                   className="absolute inset-0 pointer-events-none mix-blend-color-dodge transition-opacity duration-300 z-20"
                   style={{
-                    background: `radial-gradient(circle at ${cardTilt.glareX}% ${cardTilt.glareY}%, rgba(245, 158, 11, 0.5) 0%, rgba(56, 189, 248, 0.3) 35%, transparent 70%)`
+                    background: `radial-gradient(circle at ${cardTilt.glareX}% ${cardTilt.glareY}%, rgba(56, 189, 248, 0.5) 0%, rgba(168, 85, 247, 0.3) 35%, transparent 70%)`
                   }}
                 />
 
                 {/* Biometric HUD Corner Brackets */}
                 <div className="absolute inset-2 pointer-events-none z-20">
-                  <div className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-amber-400" />
-                  <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-amber-400" />
-                  <div className="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-amber-400" />
-                  <div className="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-amber-400" />
+                  <div className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-cyan-400" />
+                  <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-cyan-400" />
+                  <div className="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-cyan-400" />
+                  <div className="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-cyan-400" />
                 </div>
 
                 {/* Top Biometric Scanline Laser */}
-                <div className="absolute inset-x-0 top-0 h-1.5 bg-amber-400 shadow-[0_0_12px_#f59e0b] animate-pulse pointer-events-none z-20" />
+                <div className="absolute inset-x-0 top-0 h-1.5 bg-cyan-400 shadow-[0_0_12px_#38bdf8] animate-pulse pointer-events-none z-20" />
 
                 {/* Floating Security Badge */}
-                <div className="absolute bottom-3 inset-x-3 bg-black/90 backdrop-blur-md p-2 rounded-xl border border-amber-500/60 text-center z-20 shadow-xl">
-                  <div className="text-[10px] font-typewriter text-amber-300 font-bold flex items-center justify-center gap-1.5">
-                    <span className="w-2 h-2 rounded-full bg-amber-400 animate-ping" />
+                <div className="absolute bottom-3 inset-x-3 bg-black/85 backdrop-blur-md p-2 rounded-xl border border-cyan-500/60 text-center z-20 shadow-xl">
+                  <div className="text-[10px] font-mono-tech text-cyan-300 font-bold flex items-center justify-center gap-1.5">
+                    <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping" />
                     <span>3D BIOMETRIC HOLOGRAM RECORD</span>
                   </div>
-                  <div className="text-[9px] font-courier text-slate-300">
-                    SSR TRISKELION VAULT // FILE #SHD-084
+                  <div className="text-[9px] font-mono-tech text-slate-300">
+                    SSR VAULT 084 // TERMINAL RETICLE #SHD-084
                   </div>
                 </div>
               </div>
@@ -298,10 +301,10 @@ export const CharacterShowcase: React.FC<CharacterShowcaseProps> = ({
             <div className="mt-4 flex flex-wrap justify-center gap-2">
               <button
                 onClick={handleSetBadgePhoto}
-                className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-courier transition-all ${
+                className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-mono-tech transition-all ${
                   isCurrentBadgePhoto
                     ? 'bg-emerald-950/90 border border-emerald-500 text-emerald-300 font-bold shadow'
-                    : 'bg-amber-600 hover:bg-amber-500 text-slate-950 font-bold font-typewriter shadow-lg shadow-amber-600/30'
+                    : 'bg-cyan-600 hover:bg-cyan-500 text-slate-950 font-bold shadow-lg shadow-cyan-600/30'
                 }`}
               >
                 <UserCheck className="w-4 h-4" />
@@ -317,10 +320,10 @@ export const CharacterShowcase: React.FC<CharacterShowcaseProps> = ({
                   onNavigateTab('timeline');
                   sound.playBeep(520, 0.05);
                 }}
-                className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-courier bg-black/80 hover:bg-slate-900 border border-amber-700/60 text-amber-200 hover:text-white transition-colors"
+                className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-mono-tech bg-slate-900/80 hover:bg-slate-800 border border-cyan-500/40 text-cyan-200 hover:text-white transition-colors"
                 title="View full evolving dossier across seasons 1 to 7"
               >
-                <Clock className="w-3.5 h-3.5 text-amber-400" />
+                <Clock className="w-3.5 h-3.5 text-cyan-400" />
                 <span>TIMELINE ARCHIVE</span>
               </button>
 
@@ -329,7 +332,7 @@ export const CharacterShowcase: React.FC<CharacterShowcaseProps> = ({
                   onNavigateTab('clearance');
                   sound.playBeep(520, 0.05);
                 }}
-                className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-courier bg-black/80 hover:bg-slate-900 border border-amber-700/60 text-amber-200 hover:text-white transition-colors"
+                className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-mono-tech bg-slate-900/80 hover:bg-slate-800 border border-cyan-500/40 text-cyan-200 hover:text-white transition-colors"
                 title="Open S.H.I.E.L.D. ID Badge and Academy exams"
               >
                 <Award className="w-3.5 h-3.5 text-amber-400" />
@@ -340,18 +343,25 @@ export const CharacterShowcase: React.FC<CharacterShowcaseProps> = ({
 
           {/* Right Column: Hero Details, Origin & Voice Player */}
           <div className="lg:col-span-7 space-y-4">
-            <div className="p-4 rounded-xl bg-black/40 border border-amber-900/60 relative">
-              <div className="text-[10px] font-typewriter text-amber-400/90 tracking-widest uppercase mb-1">
-                STRATEGIC SCIENTIFIC RESERVE // DECLASSIFIED CASE FILE
+            <div className="p-4 rounded-xl tactical-glass-hud border-cyan-500/40 relative">
+              <div className="hud-bracket-tl" />
+              <div className="hud-bracket-tr" />
+
+              <div className="text-[10px] font-mono-tech text-cyan-400 tracking-widest uppercase mb-1">
+                SSR VAULT RECORD // DECLASSIFIED BIOMETRIC PROFILE
               </div>
               <div className="flex flex-wrap items-center gap-2 mb-2">
-                <span className="px-2.5 py-0.5 rounded text-xs font-typewriter bg-amber-950/80 border border-amber-500/80 text-amber-300 font-bold">
-                  ALIAS: <span className="redacted font-bold" title="Hover to declassify">{currentEvo.alias.toUpperCase()}</span>
-                </span>
-                <span className="px-2.5 py-0.5 rounded text-xs font-typewriter bg-amber-950/80 border border-amber-500/80 text-amber-300 font-bold">
-                  CLEARANCE: LEVEL 0{currentEvo.clearanceLevel}
-                </span>
-                <span className={`px-2.5 py-0.5 rounded text-xs font-typewriter border ${
+                <div className="text-xs font-mono-tech">
+                  <span className="text-slate-400 mr-1 font-bold">ALIAS:</span>
+                  <RedactedIntel text={currentEvo.alias.toUpperCase()} classification="LEVEL 7" />
+                </div>
+                <div className="text-xs font-mono-tech">
+                  <span className="text-slate-400 mr-1 font-bold">CLEARANCE:</span>
+                  <span className="px-2 py-0.5 rounded text-xs font-mono-tech bg-cyan-950/80 border border-cyan-500/60 text-cyan-300 font-bold">
+                    LEVEL 0{currentEvo.clearanceLevel}
+                  </span>
+                </div>
+                <span className={`px-2 py-0.5 rounded text-xs font-mono-tech border ${
                   activeHero.id === 'grant-ward'
                     ? 'bg-red-950 border-red-500 text-red-300 font-bold'
                     : 'bg-emerald-950 border-emerald-500 text-emerald-300 font-bold'
@@ -360,79 +370,82 @@ export const CharacterShowcase: React.FC<CharacterShowcaseProps> = ({
                 </span>
               </div>
 
-              <h2 className="text-3xl sm:text-4xl font-typewriter font-bold text-amber-100 tracking-wide">
+              <h2 className="text-3xl sm:text-4xl font-heading font-black text-white tracking-wide">
                 {activeHero.name}
               </h2>
-              <div className="text-xs font-courier text-amber-300/80 mt-1">
-                PORTRAYED BY <strong className="text-amber-100">{activeHero.actor}</strong> | ORIGIN:{' '}
-                <span className="redacted" title="Hover to decrypt origin file">{activeHero.origin}</span>
+              <div className="text-xs font-mono-tech text-slate-300 mt-2 flex flex-wrap items-center gap-2">
+                <span>PORTRAYED BY <strong className="text-cyan-200">{activeHero.actor}</strong></span>
+                <span>|</span>
+                <span>ORIGIN: <RedactedIntel text={activeHero.origin} classification="RESTRICTED ORIGIN" /></span>
               </div>
             </div>
 
             {/* Voice Quote Transmission Player */}
-            <div className="p-4 bg-[#140e06] rounded-xl border-2 border-amber-700/70 shadow-lg">
-              <div className="flex items-center justify-between text-xs font-typewriter text-amber-400 mb-1.5">
-                <span className="flex items-center gap-1.5 text-amber-300 font-bold">
-                  <Radio className="w-4 h-4 text-amber-400 animate-pulse" />
+            <div className="p-4 tactical-glass-hud rounded-xl border border-cyan-500/40 shadow-lg">
+              <div className="flex items-center justify-between text-xs font-mono-tech text-cyan-300 mb-1.5">
+                <span className="flex items-center gap-1.5 text-cyan-400 font-bold">
+                  <Radio className="w-4 h-4 text-cyan-400 animate-pulse" />
                   <span>INTERCEPTED AUDIO WIRE-TAP</span>
                 </span>
                 <button
                   onClick={() => handlePlayVoice(activeHero.audioClipText)}
-                  className="flex items-center gap-1 px-3 py-1 bg-amber-600 hover:bg-amber-500 text-slate-950 rounded text-xs font-typewriter font-bold transition-all shadow"
+                  className="flex items-center gap-1 px-3 py-1 bg-cyan-600 hover:bg-cyan-500 text-slate-950 rounded text-xs font-heading font-bold transition-all shadow-[0_0_12px_rgba(6,182,212,0.4)]"
                 >
                   <Volume2 className="w-3.5 h-3.5" />
-                  <span>PLAY RECORDING</span>
+                  <span>PLAY TRANSMISSION</span>
                 </button>
               </div>
-              <blockquote className="text-sm sm:text-base font-typewriter italic text-amber-100/90 pl-3 border-l-2 border-amber-500/60 mt-2">
+              <blockquote className="text-sm sm:text-base font-heading italic text-cyan-100 pl-3 border-l-2 border-cyan-400 mt-2">
                 "{activeHero.audioClipText}"
               </blockquote>
             </div>
 
             {/* Tactical Ratings Grid */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-              <div className="p-3 bg-[#111622] rounded-xl border border-amber-800/60">
-                <div className="text-[10px] font-typewriter text-amber-400/80">COMBAT RATING</div>
-                <div className="text-xl font-typewriter font-bold text-amber-300">{currentEvo.combatRating}%</div>
-                <div className="w-full bg-black h-2 rounded mt-1.5 overflow-hidden border border-amber-900/60">
-                  <div className="h-full bg-amber-400 shadow-[0_0_8px_#f59e0b]" style={{ width: `${currentEvo.combatRating}%` }} />
+              <div className="p-3 tactical-glass-hud rounded-xl border border-cyan-500/30">
+                <div className="text-[10px] font-mono-tech text-cyan-400">COMBAT RATING</div>
+                <div className="text-xl font-heading font-bold text-cyan-300">{currentEvo.combatRating}%</div>
+                <div className="w-full bg-black/60 h-2 rounded-full mt-1.5 overflow-hidden border border-cyan-900/60">
+                  <div className="h-full bg-cyan-400 shadow-[0_0_8px_#22d3ee]" style={{ width: `${currentEvo.combatRating}%` }} />
                 </div>
               </div>
 
-              <div className="p-3 bg-[#111622] rounded-xl border border-amber-800/60">
-                <div className="text-[10px] font-typewriter text-amber-400/80">TACTICAL INTEL</div>
-                <div className="text-xl font-typewriter font-bold text-emerald-400">{currentEvo.intelRating}%</div>
-                <div className="w-full bg-black h-2 rounded mt-1.5 overflow-hidden border border-amber-900/60">
+              <div className="p-3 tactical-glass-hud rounded-xl border border-cyan-500/30">
+                <div className="text-[10px] font-mono-tech text-emerald-400">TACTICAL INTEL</div>
+                <div className="text-xl font-heading font-bold text-emerald-300">{currentEvo.intelRating}%</div>
+                <div className="w-full bg-black/60 h-2 rounded-full mt-1.5 overflow-hidden border border-cyan-900/60">
                   <div className="h-full bg-emerald-400 shadow-[0_0_8px_#10b981]" style={{ width: `${currentEvo.intelRating}%` }} />
                 </div>
               </div>
 
-              <div className="p-3 bg-[#111622] rounded-xl border border-amber-800/60">
-                <div className="text-[10px] font-typewriter text-amber-400/80">SCI-TECH PROFICIENCY</div>
-                <div className="text-xl font-typewriter font-bold text-cyan-400">{currentEvo.techRating}%</div>
-                <div className="w-full bg-black h-2 rounded mt-1.5 overflow-hidden border border-amber-900/60">
-                  <div className="h-full bg-cyan-400 shadow-[0_0_8px_#06b6d4]" style={{ width: `${currentEvo.techRating}%` }} />
+              <div className="p-3 tactical-glass-hud rounded-xl border border-cyan-500/30">
+                <div className="text-[10px] font-mono-tech text-purple-400">SCI-TECH</div>
+                <div className="text-xl font-heading font-bold text-purple-300">{currentEvo.techRating}%</div>
+                <div className="w-full bg-black/60 h-2 rounded-full mt-1.5 overflow-hidden border border-cyan-900/60">
+                  <div className="h-full bg-purple-400 shadow-[0_0_8px_#c084fc]" style={{ width: `${currentEvo.techRating}%` }} />
                 </div>
               </div>
 
-              <div className="p-3 bg-[#111622] rounded-xl border border-amber-800/60">
-                <div className="text-[10px] font-typewriter text-amber-400/80 truncate">{currentEvo.specialLabel}</div>
-                <div className="text-xl font-typewriter font-bold text-yellow-300">{currentEvo.specialRating}%</div>
-                <div className="w-full bg-black h-2 rounded mt-1.5 overflow-hidden border border-amber-900/60">
-                  <div className="h-full bg-yellow-400 shadow-[0_0_8px_#eab308]" style={{ width: `${currentEvo.specialRating}%` }} />
+              <div className="p-3 tactical-glass-hud rounded-xl border border-cyan-500/30">
+                <div className="text-[10px] font-mono-tech text-amber-400 truncate">{currentEvo.specialLabel}</div>
+                <div className="text-xl font-heading font-bold text-amber-300">{currentEvo.specialRating}%</div>
+                <div className="w-full bg-black/60 h-2 rounded-full mt-1.5 overflow-hidden border border-cyan-900/60">
+                  <div className="h-full bg-amber-400 shadow-[0_0_8px_#f59e0b]" style={{ width: `${currentEvo.specialRating}%` }} />
                 </div>
               </div>
             </div>
 
             {/* Primary Weapon & Operational Duty */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-              <div className="p-3 bg-[#111622] rounded-xl border border-amber-800/60">
-                <div className="text-[10px] font-typewriter text-amber-400/80 uppercase">PRIMARY LOADOUT</div>
-                <div className="font-typewriter font-bold text-amber-100 mt-0.5">{currentEvo.primaryWeapon}</div>
+              <div className="p-3 tactical-glass-hud rounded-xl border border-cyan-500/30">
+                <div className="text-[10px] font-mono-tech text-slate-400 uppercase">PRIMARY LOADOUT</div>
+                <div className="mt-1">
+                  <RedactedIntel text={currentEvo.primaryWeapon} classification="ORDNANCE // ARMORY" />
+                </div>
               </div>
-              <div className="p-3 bg-[#111622] rounded-xl border border-amber-800/60">
-                <div className="text-[10px] font-typewriter text-amber-400/80 uppercase">SEASON 0{currentEvo.season} ASSIGNMENT</div>
-                <div className="font-typewriter font-bold text-amber-100 mt-0.5">{currentEvo.title}</div>
+              <div className="p-3 tactical-glass-hud rounded-xl border border-cyan-500/30">
+                <div className="text-[10px] font-mono-tech text-slate-400 uppercase">SEASON 0{currentEvo.season} ASSIGNMENT</div>
+                <div className="font-heading font-bold text-cyan-200 mt-1">{currentEvo.title}</div>
               </div>
             </div>
           </div>

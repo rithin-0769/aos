@@ -207,8 +207,15 @@ export const App: React.FC = () => {
 
   return (
     <div
-      className={`min-h-screen text-slate-100 flex flex-col transition-colors duration-700 tactical-war-room-bg tactical-vignette relative ${getThemeClass()}`}
+      className={`min-h-screen text-slate-100 flex flex-col transition-colors duration-700 ssr-vault-bg tactical-vignette relative ${getThemeClass()}`}
     >
+      {/* Structural Industrial Steel Girders on Margins */}
+      <div className="bunker-girder-left" />
+      <div className="bunker-girder-right" />
+
+      {/* Overhead Flickering Fluorescent Tube Lamp */}
+      <div className="fluorescent-lamp" />
+
       {/* S.H.I.E.L.D. Archival Eagle Watermark */}
       <div className="shield-bg-watermark" />
 
@@ -221,54 +228,43 @@ export const App: React.FC = () => {
       />
 
       {/* Top Secret Classification Caution Tape Banner */}
-      <div className="caution-tape py-1 px-4 text-center overflow-hidden border-b-2 border-amber-600/80 shadow-md relative z-50">
+      <div className="caution-tape py-1 px-4 text-center overflow-hidden border-b-2 border-cyan-500/60 shadow-md relative z-50">
         <div className="flex items-center justify-center gap-4 text-[10px] font-typewriter font-bold tracking-[0.25em] text-slate-950 uppercase select-none">
-          <span>★ TOP SECRET // EYES ONLY ★</span>
-          <span className="hidden md:inline">STRATEGIC SCIENTIFIC RESERVE // S.H.I.E.L.D. RESTRICTED ARCHIVES</span>
-          <span className="hidden sm:inline">UNAUTHORIZED DECRYPTION PROHIBITED UNDER TREASON ACT</span>
+          <span>★ CLASSIFIED UNDERGROUND SSR VAULT // SUB-LEVEL 07 ★</span>
+          <span className="hidden md:inline">STRATEGIC SCIENTIFIC RESERVE // BUNKER 084 TERMINAL</span>
+          <span className="hidden sm:inline">AUTHORIZED LEVEL 7+ OPERATIVES ONLY</span>
           <span>★ TOP SECRET // EYES ONLY ★</span>
         </div>
       </div>
 
-      {/* Top Tactical Command Header (SSR Dispatch Briefcase) */}
-      <header className="border-b-2 border-amber-900/80 bg-[#0e131d] shadow-2xl sticky top-0 z-40 relative">
-        {/* Brass corner rivets */}
-        <div className="brass-rivet top-2 left-2" />
-        <div className="brass-rivet top-2 right-2" />
+      {/* Top Tactical Command Header (Tactical Glass HUD Dispatch) */}
+      <header className="border-b border-cyan-500/40 bg-slate-950/80 backdrop-blur-xl shadow-2xl sticky top-0 z-40 relative">
+        <div className="hud-bracket-tl" />
+        <div className="hud-bracket-tr" />
 
         <div className="max-w-7xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-3">
           {/* Logo & Operational Status */}
           <div className="flex items-center gap-3">
             <div
-              className="w-10 h-10 rounded-xl flex items-center justify-center shadow-lg border-2 transition-all duration-500"
-              style={{
-                backgroundColor: activeSeasonData.themeColors.badgeBg,
-                borderColor: activeSeasonData.themeColors.primary,
-                color: activeSeasonData.themeColors.primary
-              }}
+              className="w-10 h-10 rounded-xl flex items-center justify-center shadow-lg border-2 border-cyan-400 bg-cyan-950/40 text-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.4)] transition-all duration-500"
             >
               <Shield className="w-6 h-6 animate-pulse" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h1 className="font-typewriter font-bold text-lg tracking-wider text-amber-100">
+                <h1 className="font-heading font-black text-lg tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-sky-200 to-indigo-300">
                   S.H.I.E.L.D. PROTOCOL
                 </h1>
                 <span
-                  className="px-2 py-0.5 rounded text-[10px] font-typewriter font-bold uppercase transition-colors"
-                  style={{
-                    backgroundColor: activeSeasonData.themeColors.badgeBg,
-                    color: activeSeasonData.themeColors.accent,
-                    border: `1px solid ${activeSeasonData.themeColors.primary}40`
-                  }}
+                  className="px-2 py-0.5 rounded text-[10px] font-mono-tech font-bold uppercase transition-colors bg-cyan-950/80 text-cyan-300 border border-cyan-500/60 shadow-[0_0_8px_rgba(6,182,212,0.3)]"
                 >
                   S0{currentSeason} // {activeSeasonData.codename}
                 </span>
-                <span className="rubber-stamp hidden sm:inline-block text-[8px] py-0 px-1.5">
-                  SSR DISPATCH
+                <span className="rubber-stamp-cyan hidden sm:inline-block text-[8px] py-0 px-1.5">
+                  VAULT HUD
                 </span>
               </div>
-              <p className="text-[11px] font-courier text-amber-200/80">
+              <p className="text-[11px] font-courier text-cyan-200/80">
                 STRATEGIC HOMELAND INTERVENTION ENFORCEMENT & LOGISTICS DIVISION
               </p>
             </div>
@@ -277,8 +273,8 @@ export const App: React.FC = () => {
           {/* Quick Metrics & Sound Toggle */}
           <div className="flex items-center gap-2 sm:gap-3 text-xs font-courier">
             {/* Quick Era Switcher Bar accessible across all tabs */}
-            <div className="flex items-center gap-0.5 bg-black/80 p-1 rounded-lg border border-amber-800/80">
-              <span className="text-amber-400 text-[10px] px-1 hidden md:inline font-bold font-typewriter">ERA:</span>
+            <div className="flex items-center gap-0.5 bg-black/80 p-1 rounded-lg border border-cyan-500/40 shadow-inner">
+              <span className="text-cyan-400 text-[10px] px-1 hidden md:inline font-bold font-mono-tech">ERA:</span>
               {([1, 2, 3, 4, 5, 6, 7] as SeasonNumber[]).map((s) => (
                 <button
                   key={s}
@@ -287,10 +283,10 @@ export const App: React.FC = () => {
                     if (s === 4) sound.playGlitch();
                     else sound.playBeep(320 + s * 70, 0.05);
                   }}
-                  className={`px-2 py-1 rounded text-[11px] font-bold font-typewriter transition-all ${
+                  className={`px-2 py-1 rounded text-[11px] font-bold font-mono-tech transition-all ${
                     currentSeason === s
-                      ? 'bg-amber-600 text-slate-950 shadow-md shadow-amber-600/40 scale-105'
-                      : 'text-amber-400/80 hover:text-white hover:bg-slate-800'
+                      ? 'bg-cyan-500 text-slate-950 shadow-md shadow-cyan-500/50 scale-105 font-black'
+                      : 'text-slate-400 hover:text-cyan-200 hover:bg-slate-900'
                   }`}
                   title={`Jump timeline to Season 0${s}`}
                 >
@@ -305,7 +301,7 @@ export const App: React.FC = () => {
                 sound.playGlitch();
                 setIsFrameworkMode(true);
               }}
-              className="px-2.5 py-1.5 rounded-lg text-xs font-typewriter font-bold bg-emerald-950/90 hover:bg-emerald-900 border border-emerald-500 text-emerald-300 transition-all flex items-center gap-1.5 shadow-[0_0_12px_rgba(16,185,129,0.3)] animate-pulse"
+              className="px-2.5 py-1.5 rounded-lg text-xs font-mono-tech font-bold bg-emerald-950/90 hover:bg-emerald-900 border border-emerald-500 text-emerald-300 transition-all flex items-center gap-1.5 shadow-[0_0_12px_rgba(16,185,129,0.3)] animate-pulse"
               title="Enter Madame Hydra's Framework Simulation"
             >
               <span className="text-sm">🐙</span>
@@ -318,11 +314,11 @@ export const App: React.FC = () => {
                 setActiveTab('clearance');
                 sound.playBeep(620, 0.05);
               }}
-              className="cursor-pointer bg-black/80 hover:bg-slate-900 px-3 py-1.5 rounded-lg border border-amber-800/80 hover:border-amber-400 flex items-center gap-2 transition-all shadow-sm select-none"
+              className="cursor-pointer bg-slate-900/80 hover:bg-slate-850 px-3 py-1.5 rounded-lg border border-cyan-500/40 hover:border-cyan-400 flex items-center gap-2 transition-all shadow-[0_0_10px_rgba(6,182,212,0.15)] select-none"
               title="Inspect Clearance Profile, Custom ID Badge & Academy Exams"
             >
-              <span className="text-amber-400 hidden sm:inline font-typewriter">CLEARANCE:</span>
-              <span className={`font-bold font-typewriter ${userProfile.clearanceLevel >= 7 ? 'text-amber-400' : 'text-amber-200'}`}>
+              <span className="text-slate-400 hidden sm:inline font-mono-tech">CLEARANCE:</span>
+              <span className={`font-bold font-mono-tech ${userProfile.clearanceLevel >= 7 ? 'text-amber-400' : 'text-cyan-300'}`}>
                 {userProfile.clearanceLevel >= 7 ? 'DIRECTOR' : `L0${userProfile.clearanceLevel}`}
               </span>
             </button>
@@ -330,44 +326,44 @@ export const App: React.FC = () => {
             {/* Audio Mute/Unmute */}
             <button
               onClick={handleToggleMute}
-              className="p-2 rounded-lg bg-black/80 border border-amber-800/80 text-amber-300 hover:text-white transition-colors"
+              className="p-2 rounded-lg bg-black/80 border border-slate-700 text-slate-300 hover:text-white transition-colors"
               title={isMuted ? 'Unmute tactical audio' : 'Mute tactical audio'}
             >
-              {isMuted ? <VolumeX className="w-4 h-4 text-red-400" /> : <Volume2 className="w-4 h-4 text-amber-400" />}
+              {isMuted ? <VolumeX className="w-4 h-4 text-red-400" /> : <Volume2 className="w-4 h-4 text-cyan-400" />}
             </button>
           </div>
         </div>
 
-        {/* Mission Briefcase Manila Folder Tabs Navigation Bar */}
-        <div className="border-t border-amber-900/60 bg-[#121824] pt-2 px-2 shadow-inner">
+        {/* Tactical Glass HUD Navigation Bar */}
+        <div className="border-t border-cyan-900/40 bg-slate-950/90 pt-2 px-2 shadow-inner">
           <nav className="max-w-7xl mx-auto px-2 flex gap-1 sm:gap-1.5 overflow-x-auto pb-0 scrollbar-none text-xs font-courier items-end">
             <button
               onClick={() => { setActiveTab('showcase'); sound.playBeep(480, 0.04); }}
-              className={`manila-tab flex flex-col items-start px-3.5 py-2 whitespace-nowrap transition-all border border-b-0 ${
-                activeTab === 'showcase' ? 'manila-tab-active' : ''
+              className={`glass-tab flex flex-col items-start px-3.5 py-2 whitespace-nowrap transition-all border border-b-0 ${
+                activeTab === 'showcase' ? 'glass-tab-active' : ''
               }`}
             >
-              <span className="text-[9px] text-amber-500/90 font-typewriter font-bold uppercase tracking-widest flex items-center gap-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
-                TAB-01
+              <span className="text-[9px] text-cyan-400/90 font-mono-tech font-bold uppercase tracking-widest flex items-center gap-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
+                HUD-01
               </span>
-              <span className="font-typewriter font-bold text-xs flex items-center gap-1.5 mt-0.5">
-                <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+              <span className="font-heading font-bold text-xs flex items-center gap-1.5 mt-0.5">
+                <Sparkles className="w-3.5 h-3.5 text-cyan-300" />
                 HERO SPOTLIGHT
               </span>
             </button>
 
             <button
               onClick={() => { setActiveTab('worldmap'); sound.playBeep(480, 0.04); }}
-              className={`manila-tab flex flex-col items-start px-3.5 py-2 whitespace-nowrap transition-all border border-b-0 ${
-                activeTab === 'worldmap' ? 'manila-tab-active' : ''
+              className={`glass-tab flex flex-col items-start px-3.5 py-2 whitespace-nowrap transition-all border border-b-0 ${
+                activeTab === 'worldmap' ? 'glass-tab-active' : ''
               }`}
             >
-              <span className="text-[9px] text-amber-500/90 font-typewriter font-bold uppercase tracking-widest flex items-center gap-1">
+              <span className="text-[9px] text-cyan-400/90 font-mono-tech font-bold uppercase tracking-widest flex items-center gap-1">
                 <span className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
-                TAB-02
+                HUD-02
               </span>
-              <span className="font-typewriter font-bold text-xs flex items-center gap-1.5 mt-0.5">
+              <span className="font-heading font-bold text-xs flex items-center gap-1.5 mt-0.5">
                 <Globe className="w-3.5 h-3.5 text-cyan-300" />
                 WORLD RADAR
               </span>
@@ -375,15 +371,15 @@ export const App: React.FC = () => {
 
             <button
               onClick={() => { setActiveTab('battles'); sound.playBeep(480, 0.04); }}
-              className={`manila-tab flex flex-col items-start px-3.5 py-2 whitespace-nowrap transition-all border border-b-0 ${
-                activeTab === 'battles' ? 'manila-tab-active' : ''
+              className={`glass-tab flex flex-col items-start px-3.5 py-2 whitespace-nowrap transition-all border border-b-0 ${
+                activeTab === 'battles' ? 'glass-tab-active' : ''
               }`}
             >
-              <span className="text-[9px] text-amber-500/90 font-typewriter font-bold uppercase tracking-widest flex items-center gap-1">
+              <span className="text-[9px] text-cyan-400/90 font-mono-tech font-bold uppercase tracking-widest flex items-center gap-1">
                 <span className="w-1.5 h-1.5 rounded-full bg-red-400" />
-                TAB-03
+                HUD-03
               </span>
-              <span className="font-typewriter font-bold text-xs flex items-center gap-1.5 mt-0.5">
+              <span className="font-heading font-bold text-xs flex items-center gap-1.5 mt-0.5">
                 <Swords className="w-3.5 h-3.5 text-rose-300" />
                 STRIKE ARENA
               </span>
@@ -391,15 +387,15 @@ export const App: React.FC = () => {
 
             <button
               onClick={() => { setActiveTab('artifacts'); sound.playBeep(480, 0.04); }}
-              className={`manila-tab flex flex-col items-start px-3.5 py-2 whitespace-nowrap transition-all border border-b-0 ${
-                activeTab === 'artifacts' ? 'manila-tab-active' : ''
+              className={`glass-tab flex flex-col items-start px-3.5 py-2 whitespace-nowrap transition-all border border-b-0 ${
+                activeTab === 'artifacts' ? 'glass-tab-active' : ''
               }`}
             >
-              <span className="text-[9px] text-amber-500/90 font-typewriter font-bold uppercase tracking-widest flex items-center gap-1">
+              <span className="text-[9px] text-cyan-400/90 font-mono-tech font-bold uppercase tracking-widest flex items-center gap-1">
                 <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
-                TAB-04
+                HUD-04
               </span>
-              <span className="font-typewriter font-bold text-xs flex items-center gap-1.5 mt-0.5">
+              <span className="font-heading font-bold text-xs flex items-center gap-1.5 mt-0.5">
                 <BookOpen className="w-3.5 h-3.5 text-amber-300" />
                 0-8-4 ARTIFACTS
               </span>
@@ -407,15 +403,15 @@ export const App: React.FC = () => {
 
             <button
               onClick={() => { setActiveTab('timeline'); sound.playBeep(480, 0.04); }}
-              className={`manila-tab flex flex-col items-start px-3.5 py-2 whitespace-nowrap transition-all border border-b-0 ${
-                activeTab === 'timeline' ? 'manila-tab-active' : ''
+              className={`glass-tab flex flex-col items-start px-3.5 py-2 whitespace-nowrap transition-all border border-b-0 ${
+                activeTab === 'timeline' ? 'glass-tab-active' : ''
               }`}
             >
-              <span className="text-[9px] text-amber-500/90 font-typewriter font-bold uppercase tracking-widest flex items-center gap-1">
+              <span className="text-[9px] text-cyan-400/90 font-mono-tech font-bold uppercase tracking-widest flex items-center gap-1">
                 <span className="w-1.5 h-1.5 rounded-full bg-sky-400" />
-                TAB-05
+                HUD-05
               </span>
-              <span className="font-typewriter font-bold text-xs flex items-center gap-1.5 mt-0.5">
+              <span className="font-heading font-bold text-xs flex items-center gap-1.5 mt-0.5">
                 <Radio className="w-3.5 h-3.5 text-sky-400" />
                 TIMELINE ARCHIVE
               </span>
@@ -423,15 +419,15 @@ export const App: React.FC = () => {
 
             <button
               onClick={() => { setActiveTab('simulators'); sound.playBeep(480, 0.04); }}
-              className={`manila-tab flex flex-col items-start px-3.5 py-2 whitespace-nowrap transition-all border border-b-0 ${
-                activeTab === 'simulators' ? 'manila-tab-active' : ''
+              className={`glass-tab flex flex-col items-start px-3.5 py-2 whitespace-nowrap transition-all border border-b-0 ${
+                activeTab === 'simulators' ? 'glass-tab-active' : ''
               }`}
             >
-              <span className="text-[9px] text-amber-500/90 font-typewriter font-bold uppercase tracking-widest flex items-center gap-1">
+              <span className="text-[9px] text-cyan-400/90 font-mono-tech font-bold uppercase tracking-widest flex items-center gap-1">
                 <span className="w-1.5 h-1.5 rounded-full bg-purple-400" />
-                TAB-06
+                HUD-06
               </span>
-              <span className="font-typewriter font-bold text-xs flex items-center gap-1.5 mt-0.5">
+              <span className="font-heading font-bold text-xs flex items-center gap-1.5 mt-0.5">
                 <Activity className="w-3.5 h-3.5 text-purple-400" />
                 LAB SIMULATORS
               </span>
@@ -439,15 +435,15 @@ export const App: React.FC = () => {
 
             <button
               onClick={() => { setActiveTab('moments'); sound.playBeep(480, 0.04); }}
-              className={`manila-tab flex flex-col items-start px-3.5 py-2 whitespace-nowrap transition-all border border-b-0 ${
-                activeTab === 'moments' ? 'manila-tab-active' : ''
+              className={`glass-tab flex flex-col items-start px-3.5 py-2 whitespace-nowrap transition-all border border-b-0 ${
+                activeTab === 'moments' ? 'glass-tab-active' : ''
               }`}
             >
-              <span className="text-[9px] text-amber-500/90 font-typewriter font-bold uppercase tracking-widest flex items-center gap-1">
+              <span className="text-[9px] text-cyan-400/90 font-mono-tech font-bold uppercase tracking-widest flex items-center gap-1">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-                TAB-07
+                HUD-07
               </span>
-              <span className="font-typewriter font-bold text-xs flex items-center gap-1.5 mt-0.5">
+              <span className="font-heading font-bold text-xs flex items-center gap-1.5 mt-0.5">
                 <MessageSquareQuote className="w-3.5 h-3.5 text-emerald-300" />
                 CANON MOMENTS
               </span>
@@ -455,37 +451,37 @@ export const App: React.FC = () => {
 
             <button
               onClick={() => { setActiveTab('clearance'); sound.playBeep(480, 0.04); }}
-              className={`manila-tab flex flex-col items-start px-3.5 py-2 whitespace-nowrap transition-all border border-b-0 ${
-                activeTab === 'clearance' ? 'manila-tab-active' : ''
+              className={`glass-tab flex flex-col items-start px-3.5 py-2 whitespace-nowrap transition-all border border-b-0 ${
+                activeTab === 'clearance' ? 'glass-tab-active' : ''
               }`}
             >
-              <span className="text-[9px] text-amber-500/90 font-typewriter font-bold uppercase tracking-widest flex items-center gap-1">
+              <span className="text-[9px] text-cyan-400/90 font-mono-tech font-bold uppercase tracking-widest flex items-center gap-1">
                 <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
-                TAB-08
+                HUD-08
               </span>
-              <span className="font-typewriter font-bold text-xs flex items-center gap-1.5 mt-0.5">
+              <span className="font-heading font-bold text-xs flex items-center gap-1.5 mt-0.5">
                 <Award className="w-3.5 h-3.5 text-amber-400" />
                 ID BADGE & EXAMS
               </span>
             </button>
 
             {/* Visual Divider */}
-            <div className="h-8 w-px bg-amber-800/60 mx-1 self-center shrink-0 hidden sm:block" />
+            <div className="h-8 w-px bg-cyan-800/40 mx-1 self-center shrink-0 hidden sm:block" />
 
             {/* Classified Briefcase / Games Folder Tab with Dropdown */}
             <div ref={gameMenuRef} className="relative flex items-end">
               <button
                 onClick={() => handleSelectGame(lastGameTab)}
-                className={`manila-tab flex flex-col items-start px-3.5 py-2 whitespace-nowrap transition-all border border-b-0 ${
-                  isGameTab ? 'manila-tab-active shadow-amber-500/20' : ''
+                className={`glass-tab flex flex-col items-start px-3.5 py-2 whitespace-nowrap transition-all border border-b-0 ${
+                  isGameTab ? 'glass-tab-active shadow-cyan-500/30' : ''
                 }`}
               >
                 <div className="flex items-center gap-1.5">
-                  <span className="rubber-stamp-amber text-[8px] py-0 px-1">RESTRICTED</span>
-                  <span className="text-[9px] text-amber-400 font-bold font-typewriter">TAB-09</span>
+                  <span className="rubber-stamp-cyan text-[8px] py-0 px-1">RESTRICTED</span>
+                  <span className="text-[9px] text-cyan-400 font-bold font-mono-tech">HUD-09</span>
                 </div>
-                <div className="font-typewriter font-bold text-xs flex items-center gap-1.5 mt-0.5">
-                  <Gamepad2 className="w-3.5 h-3.5 text-amber-400" />
+                <div className="font-heading font-bold text-xs flex items-center gap-1.5 mt-0.5">
+                  <Gamepad2 className="w-3.5 h-3.5 text-cyan-300" />
                   <span>CLASSIFIED GAMES [7]</span>
                 </div>
               </button>
@@ -494,8 +490,8 @@ export const App: React.FC = () => {
                 onClick={() => setShowGameMenu(prev => !prev)}
                 className={`p-1.5 mb-1 ml-1 rounded-lg border transition-all ${
                   showGameMenu
-                    ? 'bg-amber-500 text-slate-950 border-amber-400'
-                    : 'bg-black border-amber-700/80 text-amber-400 hover:text-white'
+                    ? 'bg-cyan-500 text-slate-950 border-cyan-400'
+                    : 'bg-black/80 border-cyan-700/60 text-cyan-400 hover:text-white'
                 }`}
                 title="Quick select mission"
               >
@@ -504,10 +500,10 @@ export const App: React.FC = () => {
 
             {/* Quick Game Selector Popover */}
             {showGameMenu && (
-              <div className="absolute top-full right-0 mt-2 w-64 bg-[#140e06] border-2 border-amber-500/70 rounded-xl p-2 shadow-2xl backdrop-blur-xl z-50 space-y-1 animate-scale-up">
-                <div className="px-2 py-1 text-[10px] text-amber-400 font-bold font-typewriter uppercase tracking-wider border-b border-amber-800/80 mb-1 flex items-center justify-between">
+              <div className="absolute top-full right-0 mt-2 w-64 bg-slate-950/95 border border-cyan-500/60 rounded-xl p-2 shadow-2xl backdrop-blur-xl z-50 space-y-1 animate-scale-up">
+                <div className="px-2 py-1 text-[10px] text-cyan-300 font-bold font-mono-tech uppercase tracking-wider border-b border-cyan-800/60 mb-1 flex items-center justify-between">
                   <span>SEASON MISSIONS</span>
-                  <span className="text-[9px] text-amber-300">7 COLD WAR SUITES</span>
+                  <span className="text-[9px] text-cyan-400">7 SIMULATION SUITES</span>
                 </div>
                 {[
                   { id: 'koenig' as const, name: 'Koenig Lie Detector', season: 'S01', icon: Zap, color: 'text-yellow-400' },
@@ -524,17 +520,17 @@ export const App: React.FC = () => {
                     <button
                       key={g.id}
                       onClick={() => handleSelectGame(g.id)}
-                      className={`w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg text-left text-xs font-typewriter transition-all ${
+                      className={`w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg text-left text-xs font-mono-tech transition-all ${
                         isCur
-                          ? 'bg-amber-600 text-slate-950 font-bold border border-amber-400 shadow'
-                          : 'text-amber-200/80 hover:bg-black hover:text-white'
+                          ? 'bg-cyan-500/25 text-white font-bold border border-cyan-400 shadow-[0_0_10px_rgba(6,182,212,0.3)]'
+                          : 'text-slate-300 hover:bg-slate-900 hover:text-white'
                       }`}
                     >
                       <div className="flex items-center gap-2">
                         <Icon className={`w-3.5 h-3.5 ${g.color}`} />
                         <span>{g.name}</span>
                       </div>
-                      <span className="text-[9px] px-1.5 py-0.5 rounded bg-black text-amber-400 font-bold border border-amber-900/50">
+                      <span className="text-[9px] px-1.5 py-0.5 rounded bg-black text-cyan-400 font-bold border border-cyan-900/60">
                         {g.season}
                       </span>
                     </button>

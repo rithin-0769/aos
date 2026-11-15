@@ -513,6 +513,48 @@ class SoundController {
     } catch {}
   }
 
+  // Typewriter Mechanical Click for Redaction & Decryption
+  public playTypewriterClick() {
+    const ctx = this.getContext();
+    if (!ctx) return;
+    try {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(1400 + Math.random() * 400, ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(300, ctx.currentTime + 0.03);
+
+      gain.gain.setValueAtTime(0.08, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.035);
+
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start();
+      osc.stop(ctx.currentTime + 0.035);
+    } catch {}
+  }
+
+  // High-Tech Cyber Decryption Chirp
+  public playDecryptionChirp() {
+    const ctx = this.getContext();
+    if (!ctx) return;
+    try {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(700, ctx.currentTime);
+      osc.frequency.linearRampToValueAtTime(1800, ctx.currentTime + 0.05);
+
+      gain.gain.setValueAtTime(0.09, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.06);
+
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start();
+      osc.stop(ctx.currentTime + 0.06);
+    } catch {}
+  }
+
   // Speech Synthesizer for Quotes
   public speakQuote(text: string, voiceName?: string) {
     if (this.isMuted || !('speechSynthesis' in window)) return;
