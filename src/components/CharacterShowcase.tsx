@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { CharacterDossier, SeasonNumber, UserProfile } from '../types';
 import { sound } from '../utils/audio';
 import { RedactedIntel } from './RedactedIntel';
@@ -41,6 +41,7 @@ interface CharacterShowcaseProps {
   onNavigateTab: (tab: 'timeline' | 'simulators' | 'moments' | 'clearance') => void;
   onSeasonChange?: (season: SeasonNumber) => void;
   initialHeroId?: string;
+  onHeroChange?: (heroId: string) => void;
 }
 
 export const CharacterShowcase: React.FC<CharacterShowcaseProps> = ({
@@ -50,10 +51,14 @@ export const CharacterShowcase: React.FC<CharacterShowcaseProps> = ({
   onUpdateProfile,
   onNavigateTab,
   onSeasonChange,
-  initialHeroId
+  initialHeroId,
+  onHeroChange
 }) => {
-  // Select all characters that have uploaded portraits
-  const featuredCharacters = characters.filter((c) => Boolean(c.imageUrl));
+  // Memoize featured characters so reference is stable
+  const featuredCharacters = useMemo(
+    () => characters.filter((c) => Boolean(c.imageUrl)),
+    [characters]
+  );
 
   const [activeHeroId, setActiveHeroId] = useState<string>(initialHeroId || 'daisy-johnson');
   const [selectedSeasonArc, setSelectedSeasonArc] = useState<SeasonNumber>(currentSeason);
@@ -89,12 +94,14 @@ export const CharacterShowcase: React.FC<CharacterShowcaseProps> = ({
     setSelectedSeasonArc(currentSeason);
   }, [currentSeason]);
 
-  // Sync activeHeroId if initialHeroId changes
+  // Sync activeHeroId ONLY when initialHeroId changes externally
+  const prevInitialHeroIdRef = useRef(initialHeroId);
   useEffect(() => {
-    if (initialHeroId && featuredCharacters.some((c) => c.id === initialHeroId)) {
+    if (initialHeroId && initialHeroId !== prevInitialHeroIdRef.current) {
+      prevInitialHeroIdRef.current = initialHeroId;
       setActiveHeroId(initialHeroId);
     }
-  }, [initialHeroId, featuredCharacters]);
+  }, [initialHeroId]);
 
   const activeHero =
     featuredCharacters.find((c) => c.id === activeHeroId) || featuredCharacters[0] || characters[0];
@@ -116,6 +123,8 @@ export const CharacterShowcase: React.FC<CharacterShowcaseProps> = ({
 
   const handleSelectHero = (id: string) => {
     setActiveHeroId(id);
+    prevInitialHeroIdRef.current = id;
+    onHeroChange?.(id);
     sound.playBeep(620, 0.08);
   };
 

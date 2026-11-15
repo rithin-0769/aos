@@ -586,6 +586,7 @@ export const App: React.FC = () => {
             onNavigateTab={(tab) => setActiveTab(tab)}
             onSeasonChange={(s) => setCurrentSeason(s)}
             initialHeroId={selectedHeroForShowcase}
+            onHeroChange={(id) => setSelectedHeroForShowcase(id)}
           />
         )}
 
