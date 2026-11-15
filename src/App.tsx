@@ -28,6 +28,7 @@ import { ZephyrWorldMap } from './components/ZephyrWorldMap';
 import { StrikeTeamBattle } from './components/StrikeTeamBattle';
 import { ArtifactArchive } from './components/ArtifactArchive';
 import { FrameworkOverlay } from './components/FrameworkOverlay';
+import { OperativeTelemetryDashboard } from './components/OperativeTelemetryDashboard';
 // Game components
 import { KoenigLieDetector } from './components/games/KoenigLieDetector';
 import { LolaSkyDodger } from './components/games/LolaSkyDodger';
@@ -312,136 +313,187 @@ export const App: React.FC = () => {
           </div>
         </div>
 
-        {/* Global Navigation Bar */}
-        <nav className="max-w-7xl mx-auto px-4 flex gap-1 sm:gap-2 overflow-x-auto pb-2 scrollbar-none text-xs font-mono-tech">
-          <button
-            onClick={() => { setActiveTab('showcase'); sound.playBeep(480, 0.04); }}
-            className={`flex items-center gap-1.5 px-3 py-2 rounded-lg whitespace-nowrap transition-all ${
-              activeTab === 'showcase'
-                ? 'bg-gradient-to-r from-sky-600 to-indigo-600 text-white font-bold shadow-lg shadow-sky-600/30 ring-1 ring-sky-300'
-                : 'text-slate-400 hover:text-white hover:bg-slate-900'
-            }`}
-          >
-            <Sparkles className="w-4 h-4 text-amber-400" />
-            <span>HERO SPOTLIGHT</span>
-          </button>
-
-          <button
-            onClick={() => { setActiveTab('worldmap'); sound.playBeep(480, 0.04); }}
-            className={`flex items-center gap-1.5 px-3 py-2 rounded-lg whitespace-nowrap transition-all ${
-              activeTab === 'worldmap'
-                ? 'bg-gradient-to-r from-cyan-600 to-teal-600 text-white font-bold shadow-lg shadow-cyan-600/30 ring-1 ring-cyan-300'
-                : 'text-slate-400 hover:text-white hover:bg-slate-900'
-            }`}
-          >
-            <Globe className="w-4 h-4 text-cyan-300" />
-            <span>WORLD RADAR</span>
-          </button>
-
-          <button
-            onClick={() => { setActiveTab('battles'); sound.playBeep(480, 0.04); }}
-            className={`flex items-center gap-1.5 px-3 py-2 rounded-lg whitespace-nowrap transition-all ${
-              activeTab === 'battles'
-                ? 'bg-gradient-to-r from-red-600 to-rose-600 text-white font-bold shadow-lg shadow-red-600/30 ring-1 ring-rose-300'
-                : 'text-slate-400 hover:text-white hover:bg-slate-900'
-            }`}
-          >
-            <Swords className="w-4 h-4 text-rose-300" />
-            <span>STRIKE ARENA</span>
-          </button>
-
-          <button
-            onClick={() => { setActiveTab('artifacts'); sound.playBeep(480, 0.04); }}
-            className={`flex items-center gap-1.5 px-3 py-2 rounded-lg whitespace-nowrap transition-all ${
-              activeTab === 'artifacts'
-                ? 'bg-gradient-to-r from-amber-600 to-orange-600 text-white font-bold shadow-lg shadow-amber-600/30 ring-1 ring-amber-300'
-                : 'text-slate-400 hover:text-white hover:bg-slate-900'
-            }`}
-          >
-            <BookOpen className="w-4 h-4 text-amber-300" />
-            <span>0-8-4 ARTIFACTS</span>
-          </button>
-
-          <button
-            onClick={() => { setActiveTab('timeline'); sound.playBeep(480, 0.04); }}
-            className={`flex items-center gap-1.5 px-3 py-2 rounded-lg whitespace-nowrap transition-all ${
-              activeTab === 'timeline'
-                ? 'bg-gradient-to-r from-blue-600 to-sky-600 text-white font-bold shadow-lg shadow-blue-600/30 ring-1 ring-sky-300'
-                : 'text-slate-400 hover:text-white hover:bg-slate-900'
-            }`}
-          >
-            <Radio className="w-4 h-4" />
-            <span>TIMELINE</span>
-          </button>
-
-          <button
-            onClick={() => { setActiveTab('simulators'); sound.playBeep(480, 0.04); }}
-            className={`flex items-center gap-1.5 px-3 py-2 rounded-lg whitespace-nowrap transition-all ${
-              activeTab === 'simulators'
-                ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold shadow-lg shadow-indigo-600/30 ring-1 ring-indigo-300'
-                : 'text-slate-400 hover:text-white hover:bg-slate-900'
-            }`}
-          >
-            <Activity className="w-4 h-4" />
-            <span>SIMULATORS</span>
-          </button>
-
-          <button
-            onClick={() => { setActiveTab('moments'); sound.playBeep(480, 0.04); }}
-            className={`flex items-center gap-1.5 px-3 py-2 rounded-lg whitespace-nowrap transition-all ${
-              activeTab === 'moments'
-                ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-bold shadow-lg shadow-emerald-600/30 ring-1 ring-emerald-300'
-                : 'text-slate-400 hover:text-white hover:bg-slate-900'
-            }`}
-          >
-            <MessageSquareQuote className="w-4 h-4" />
-            <span>FAN MOMENTS</span>
-          </button>
-
-          <button
-            onClick={() => { setActiveTab('clearance'); sound.playBeep(480, 0.04); }}
-            className={`flex items-center gap-1.5 px-3 py-2 rounded-lg whitespace-nowrap transition-all ${
-              activeTab === 'clearance'
-                ? 'bg-gradient-to-r from-sky-600 to-cyan-600 text-white font-bold shadow-lg shadow-sky-600/30 ring-1 ring-sky-300'
-                : 'text-slate-400 hover:text-white hover:bg-slate-900'
-            }`}
-          >
-            <Award className="w-4 h-4" />
-            <span>ID BADGE & EXAM</span>
-          </button>
-          {/* Visual Divider */}
-          <div className="h-6 w-px bg-slate-800 mx-1 self-center shrink-0 hidden sm:block" />
-
-          {/* Classified Games Hub Tab with Quick Mission Dropdown */}
-          <div ref={gameMenuRef} className="relative flex items-center">
+        {/* Mission Briefcase Folder Tabs Navigation Bar */}
+        <div className="border-t border-slate-800/80 bg-slate-950/95 backdrop-blur-md pt-2 px-2 shadow-inner">
+          <nav className="max-w-7xl mx-auto px-2 flex gap-1 sm:gap-1.5 overflow-x-auto pb-0 scrollbar-none text-xs font-courier items-end">
             <button
-              onClick={() => handleSelectGame(lastGameTab)}
-              className={`flex items-center gap-1.5 px-3 py-2 rounded-lg whitespace-nowrap transition-all ${
-                isGameTab
-                  ? 'bg-gradient-to-r from-amber-600 to-yellow-600 text-slate-950 font-bold shadow-md shadow-amber-600/30 ring-1 ring-amber-300'
-                  : 'text-amber-400 hover:text-amber-300 hover:bg-slate-900'
+              onClick={() => { setActiveTab('showcase'); sound.playBeep(480, 0.04); }}
+              className={`dossier-tab flex flex-col items-start px-3.5 py-2 whitespace-nowrap transition-all border border-b-0 ${
+                activeTab === 'showcase'
+                  ? 'dossier-tab-active text-sky-200 border-sky-400/80'
+                  : 'bg-slate-900/60 border-slate-800 text-slate-400 hover:text-white hover:bg-slate-850'
               }`}
             >
-              <Gamepad2 className="w-4 h-4" />
-              <span>CLASSIFIED GAMES</span>
-              <span className={`px-1.5 py-0.2 rounded-full text-[9px] font-bold ${
-                isGameTab ? 'bg-slate-950 text-amber-300' : 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
-              }`}>
-                7
+              <span className="text-[9px] text-slate-500 font-bold uppercase tracking-widest flex items-center gap-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-sky-400" />
+                FILE-01
+              </span>
+              <span className="font-heading font-bold text-xs flex items-center gap-1.5 mt-0.5">
+                <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+                HERO SPOTLIGHT
               </span>
             </button>
 
             <button
-              onClick={() => setShowGameMenu(prev => !prev)}
-              className={`p-1.5 ml-1 rounded-lg border transition-all ${
-                showGameMenu
-                  ? 'bg-amber-500 text-slate-950 border-amber-400'
-                  : 'bg-slate-900 border-slate-700 text-slate-400 hover:text-white'
+              onClick={() => { setActiveTab('worldmap'); sound.playBeep(480, 0.04); }}
+              className={`dossier-tab flex flex-col items-start px-3.5 py-2 whitespace-nowrap transition-all border border-b-0 ${
+                activeTab === 'worldmap'
+                  ? 'dossier-tab-active text-cyan-200 border-cyan-400/80'
+                  : 'bg-slate-900/60 border-slate-800 text-slate-400 hover:text-white hover:bg-slate-850'
               }`}
-              title="Quick select mission"
             >
-              <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${showGameMenu ? 'rotate-180' : ''}`} />
+              <span className="text-[9px] text-slate-500 font-bold uppercase tracking-widest flex items-center gap-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
+                RAD-02
+              </span>
+              <span className="font-heading font-bold text-xs flex items-center gap-1.5 mt-0.5">
+                <Globe className="w-3.5 h-3.5 text-cyan-300" />
+                WORLD RADAR
+              </span>
             </button>
+
+            <button
+              onClick={() => { setActiveTab('battles'); sound.playBeep(480, 0.04); }}
+              className={`dossier-tab flex flex-col items-start px-3.5 py-2 whitespace-nowrap transition-all border border-b-0 ${
+                activeTab === 'battles'
+                  ? 'dossier-tab-active text-red-200 border-red-500/80'
+                  : 'bg-slate-900/60 border-slate-800 text-slate-400 hover:text-white hover:bg-slate-850'
+              }`}
+            >
+              <span className="text-[9px] text-slate-500 font-bold uppercase tracking-widest flex items-center gap-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-red-400" />
+                STR-03
+              </span>
+              <span className="font-heading font-bold text-xs flex items-center gap-1.5 mt-0.5">
+                <Swords className="w-3.5 h-3.5 text-rose-300" />
+                STRIKE ARENA
+              </span>
+            </button>
+
+            <button
+              onClick={() => { setActiveTab('artifacts'); sound.playBeep(480, 0.04); }}
+              className={`dossier-tab flex flex-col items-start px-3.5 py-2 whitespace-nowrap transition-all border border-b-0 ${
+                activeTab === 'artifacts'
+                  ? 'dossier-tab-active text-amber-200 border-amber-500/80'
+                  : 'bg-slate-900/60 border-slate-800 text-slate-400 hover:text-white hover:bg-slate-850'
+              }`}
+            >
+              <span className="text-[9px] text-slate-500 font-bold uppercase tracking-widest flex items-center gap-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
+                084-SEC
+              </span>
+              <span className="font-heading font-bold text-xs flex items-center gap-1.5 mt-0.5">
+                <BookOpen className="w-3.5 h-3.5 text-amber-300" />
+                0-8-4 ARTIFACTS
+              </span>
+            </button>
+
+            <button
+              onClick={() => { setActiveTab('timeline'); sound.playBeep(480, 0.04); }}
+              className={`dossier-tab flex flex-col items-start px-3.5 py-2 whitespace-nowrap transition-all border border-b-0 ${
+                activeTab === 'timeline'
+                  ? 'dossier-tab-active text-sky-200 border-sky-400/80'
+                  : 'bg-slate-900/60 border-slate-800 text-slate-400 hover:text-white hover:bg-slate-850'
+              }`}
+            >
+              <span className="text-[9px] text-slate-500 font-bold uppercase tracking-widest flex items-center gap-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-sky-400" />
+                S1-S7
+              </span>
+              <span className="font-heading font-bold text-xs flex items-center gap-1.5 mt-0.5">
+                <Radio className="w-3.5 h-3.5 text-sky-400" />
+                TIMELINE
+              </span>
+            </button>
+
+            <button
+              onClick={() => { setActiveTab('simulators'); sound.playBeep(480, 0.04); }}
+              className={`dossier-tab flex flex-col items-start px-3.5 py-2 whitespace-nowrap transition-all border border-b-0 ${
+                activeTab === 'simulators'
+                  ? 'dossier-tab-active text-purple-200 border-purple-400/80'
+                  : 'bg-slate-900/60 border-slate-800 text-slate-400 hover:text-white hover:bg-slate-850'
+              }`}
+            >
+              <span className="text-[9px] text-slate-500 font-bold uppercase tracking-widest flex items-center gap-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-purple-400" />
+                LAB-06
+              </span>
+              <span className="font-heading font-bold text-xs flex items-center gap-1.5 mt-0.5">
+                <Activity className="w-3.5 h-3.5 text-purple-400" />
+                SIMULATORS
+              </span>
+            </button>
+
+            <button
+              onClick={() => { setActiveTab('moments'); sound.playBeep(480, 0.04); }}
+              className={`dossier-tab flex flex-col items-start px-3.5 py-2 whitespace-nowrap transition-all border border-b-0 ${
+                activeTab === 'moments'
+                  ? 'dossier-tab-active text-emerald-200 border-emerald-400/80'
+                  : 'bg-slate-900/60 border-slate-800 text-slate-400 hover:text-white hover:bg-slate-850'
+              }`}
+            >
+              <span className="text-[9px] text-slate-500 font-bold uppercase tracking-widest flex items-center gap-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                CANON-07
+              </span>
+              <span className="font-heading font-bold text-xs flex items-center gap-1.5 mt-0.5">
+                <MessageSquareQuote className="w-3.5 h-3.5 text-emerald-300" />
+                FAN MOMENTS
+              </span>
+            </button>
+
+            <button
+              onClick={() => { setActiveTab('clearance'); sound.playBeep(480, 0.04); }}
+              className={`dossier-tab flex flex-col items-start px-3.5 py-2 whitespace-nowrap transition-all border border-b-0 ${
+                activeTab === 'clearance'
+                  ? 'dossier-tab-active text-sky-200 border-sky-400/80'
+                  : 'bg-slate-900/60 border-slate-800 text-slate-400 hover:text-white hover:bg-slate-850'
+              }`}
+            >
+              <span className="text-[9px] text-slate-500 font-bold uppercase tracking-widest flex items-center gap-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
+                SEC-08
+              </span>
+              <span className="font-heading font-bold text-xs flex items-center gap-1.5 mt-0.5">
+                <Award className="w-3.5 h-3.5 text-amber-400" />
+                ID BADGE & EXAM
+              </span>
+            </button>
+
+            {/* Visual Divider */}
+            <div className="h-8 w-px bg-slate-800 mx-1 self-center shrink-0 hidden sm:block" />
+
+            {/* Classified Briefcase / Games Folder Tab with Dropdown */}
+            <div ref={gameMenuRef} className="relative flex items-end">
+              <button
+                onClick={() => handleSelectGame(lastGameTab)}
+                className={`dossier-tab flex flex-col items-start px-3.5 py-2 whitespace-nowrap transition-all border border-b-0 ${
+                  isGameTab
+                    ? 'dossier-tab-active text-amber-200 border-amber-500/80 shadow-amber-500/20'
+                    : 'bg-slate-900/80 border-amber-500/40 text-amber-400 hover:text-amber-200 hover:bg-slate-850'
+                }`}
+              >
+                <div className="flex items-center gap-1.5">
+                  <span className="rubber-stamp-amber text-[8px] py-0 px-1">RESTRICTED</span>
+                  <span className="text-[9px] text-amber-500/80 font-bold">DOSSIER-09</span>
+                </div>
+                <div className="font-heading font-bold text-xs flex items-center gap-1.5 mt-0.5">
+                  <Gamepad2 className="w-3.5 h-3.5 text-amber-400" />
+                  <span>CLASSIFIED GAMES [7]</span>
+                </div>
+              </button>
+
+              <button
+                onClick={() => setShowGameMenu(prev => !prev)}
+                className={`p-1.5 mb-1 ml-1 rounded-lg border transition-all ${
+                  showGameMenu
+                    ? 'bg-amber-500 text-slate-950 border-amber-400'
+                    : 'bg-slate-900 border-slate-700 text-slate-400 hover:text-white'
+                }`}
+                title="Quick select mission"
+              >
+                <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${showGameMenu ? 'rotate-180' : ''}`} />
+              </button>
 
             {/* Quick Game Selector Popover */}
             {showGameMenu && (
@@ -485,7 +537,8 @@ export const App: React.FC = () => {
             )}
           </div>
         </nav>
-      </header>
+      </div>
+    </header>
 
       {/* Easter Egg Notification Toast */}
       {recentEggNotice && (
@@ -504,6 +557,22 @@ export const App: React.FC = () => {
 
       {/* Main App Workspace */}
       <main className="max-w-7xl mx-auto px-4 py-6 flex-1 w-full space-y-6">
+        {/* Retro-Tech SSR Operative Telemetry Dashboard */}
+        <OperativeTelemetryDashboard
+          userProfile={userProfile}
+          currentSeason={currentSeason}
+          onNavigateTab={(tab) => {
+            if (['koenig', 'lola', 'terrigen', 'hack', 'lmd', 'kitson', 'zephyr'].includes(tab)) {
+              handleSelectGame(tab as typeof lastGameTab);
+            } else {
+              setActiveTab(tab as typeof activeTab);
+            }
+            sound.playBeep(640, 0.05);
+          }}
+          foundEasterEggsCount={userProfile.foundEasterEggs.length}
+          totalEasterEggs={easterEggs.length}
+        />
+
         {/* Tab: Hero Spotlight (Dedicated Character Showcase built around uploaded images) */}
         {activeTab === 'showcase' && (
           <CharacterShowcase

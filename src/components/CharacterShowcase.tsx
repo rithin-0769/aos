@@ -56,6 +56,32 @@ export const CharacterShowcase: React.FC<CharacterShowcaseProps> = ({
 
   const [activeHeroId, setActiveHeroId] = useState<string>(initialHeroId || 'daisy-johnson');
   const [selectedSeasonArc, setSelectedSeasonArc] = useState<SeasonNumber>(currentSeason);
+  const [cardTilt, setCardTilt] = useState<{ x: number; y: number; glareX: number; glareY: number }>({
+    x: 0,
+    y: 0,
+    glareX: 50,
+    glareY: 50
+  });
+
+  const handleCardMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+    const rotateX = ((y - centerY) / centerY) * -12;
+    const rotateY = ((x - centerX) / centerX) * 12;
+    setCardTilt({
+      x: rotateX,
+      y: rotateY,
+      glareX: (x / rect.width) * 100,
+      glareY: (y / rect.height) * 100
+    });
+  };
+
+  const handleCardMouseLeave = () => {
+    setCardTilt({ x: 0, y: 0, glareX: 50, glareY: 50 });
+  };
 
   // Sync selectedSeasonArc whenever parent currentSeason changes
   useEffect(() => {
@@ -195,8 +221,21 @@ export const CharacterShowcase: React.FC<CharacterShowcaseProps> = ({
                 className={`absolute -inset-1 rounded-3xl blur-xl opacity-60 transition-all duration-500 bg-gradient-to-r ${getHeroThemeBorder(activeHero.id)}`}
               />
 
-              {/* Portrait Frame */}
-              <div className="relative w-64 h-80 sm:w-72 sm:h-96 rounded-2xl overflow-hidden border-2 border-sky-400/80 bg-slate-950 shadow-2xl">
+              {/* 3D Holographic Card Portrait Frame */}
+              <div
+                onMouseMove={handleCardMouseMove}
+                onMouseLeave={handleCardMouseLeave}
+                style={{
+                  transform: `perspective(1000px) rotateX(${cardTilt.x}deg) rotateY(${cardTilt.y}deg)`,
+                  transition: 'transform 0.15s ease-out'
+                }}
+                className="relative w-64 h-80 sm:w-72 sm:h-96 rounded-2xl overflow-hidden border-2 border-sky-400/80 bg-slate-950 shadow-2xl cursor-pointer hologram-shimmer"
+              >
+                {/* Vintage Classified Red Rubber Stamp */}
+                <div className="absolute top-3 right-3 z-30 rubber-stamp text-[9px] pointer-events-none">
+                  CLASSIFIED // S0{currentEvo.season}
+                </div>
+
                 {activeHero.imageUrl ? (
                   <img
                     src={activeHero.imageUrl}
@@ -204,13 +243,21 @@ export const CharacterShowcase: React.FC<CharacterShowcaseProps> = ({
                     className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
                   />
                 ) : (
-                  <div className="w-full h-full flex items-center justify-center text-slate-600">
-                    No image
+                  <div className="w-full h-full flex items-center justify-center text-slate-600 font-courier">
+                    NO RECORD
                   </div>
                 )}
 
+                {/* Dynamic Specular Holographic Glare */}
+                <div
+                  className="absolute inset-0 pointer-events-none mix-blend-color-dodge transition-opacity duration-300 z-20"
+                  style={{
+                    background: `radial-gradient(circle at ${cardTilt.glareX}% ${cardTilt.glareY}%, rgba(56, 189, 248, 0.45) 0%, rgba(168, 85, 247, 0.25) 35%, transparent 70%)`
+                  }}
+                />
+
                 {/* Biometric HUD Corner Brackets */}
-                <div className="absolute inset-2 pointer-events-none">
+                <div className="absolute inset-2 pointer-events-none z-20">
                   <div className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-cyan-400" />
                   <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-cyan-400" />
                   <div className="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-cyan-400" />
@@ -218,16 +265,16 @@ export const CharacterShowcase: React.FC<CharacterShowcaseProps> = ({
                 </div>
 
                 {/* Top Biometric Scanline Laser */}
-                <div className="absolute inset-x-0 top-0 h-1.5 bg-cyan-400 shadow-[0_0_12px_#38bdf8] animate-pulse pointer-events-none" />
+                <div className="absolute inset-x-0 top-0 h-1.5 bg-cyan-400 shadow-[0_0_12px_#38bdf8] animate-pulse pointer-events-none z-20" />
 
                 {/* Floating Security Badge */}
-                <div className="absolute bottom-3 inset-x-3 bg-slate-950/85 backdrop-blur-md p-2 rounded-xl border border-sky-500/40 text-center">
-                  <div className="text-[10px] font-mono-tech text-sky-400 font-bold flex items-center justify-center gap-1.5">
+                <div className="absolute bottom-3 inset-x-3 bg-slate-950/90 backdrop-blur-md p-2 rounded-xl border border-sky-500/40 text-center z-20">
+                  <div className="text-[10px] font-courier text-sky-400 font-bold flex items-center justify-center gap-1.5">
                     <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
-                    <span>AUTHENTICATED BIOMETRIC RECORD</span>
+                    <span>3D BIOMETRIC HOLOGRAM RECORD</span>
                   </div>
-                  <div className="text-[9px] font-mono-tech text-slate-400">
-                    S.H.I.E.L.D. TRISKELION DOSSIER ARCHIVE
+                  <div className="text-[9px] font-courier text-slate-400">
+                    S.H.I.E.L.D. TRISKELION DOSSIER ARCHIVE // SEC-084
                   </div>
                 </div>
               </div>

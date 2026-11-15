@@ -43,6 +43,32 @@ export const DossierViewer: React.FC<DossierViewerProps> = ({
 }) => {
   const [selectedCharId, setSelectedCharId] = useState<string>(characters[0].id);
   const selectedChar = characters.find(c => c.id === selectedCharId) || characters[0];
+  const [cardTilt, setCardTilt] = useState<{ x: number; y: number; glareX: number; glareY: number }>({
+    x: 0,
+    y: 0,
+    glareX: 50,
+    glareY: 50
+  });
+
+  const handleCardMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+    const rotateX = ((y - centerY) / centerY) * -10;
+    const rotateY = ((x - centerX) / centerX) * 10;
+    setCardTilt({
+      x: rotateX,
+      y: rotateY,
+      glareX: (x / rect.width) * 100,
+      glareY: (y / rect.height) * 100
+    });
+  };
+
+  const handleCardMouseLeave = () => {
+    setCardTilt({ x: 0, y: 0, glareX: 50, glareY: 50 });
+  };
 
   // Find the closest evolution for the current season
   const isCharacterIntroduced = (char: CharacterDossier): boolean => {
@@ -125,10 +151,21 @@ export const DossierViewer: React.FC<DossierViewerProps> = ({
         })}
       </div>
 
-      {/* Main Dossier Card */}
-      <div className="p-4 sm:p-6 rounded-2xl border border-sky-900/60 bg-slate-950/85 backdrop-blur-md relative overflow-hidden">
+      {/* Main Dossier Card (SSR Classified Dossier Folder) */}
+      <div className="ssr-dossier-card p-4 sm:p-6 rounded-2xl border border-sky-900/60 bg-slate-950/90 backdrop-blur-md relative overflow-hidden shadow-2xl">
+        {/* Brass corner rivets */}
+        <div className="brass-rivet top-3 left-3" />
+        <div className="brass-rivet top-3 right-3" />
+        <div className="brass-rivet bottom-3 left-3" />
+        <div className="brass-rivet bottom-3 right-3" />
+
+        {/* Vintage Top Secret Red Rubber Stamp */}
+        <div className="absolute top-4 right-14 z-20 rubber-stamp text-[11px] pointer-events-none select-none">
+          TOP SECRET // S0{activeEvo.season}
+        </div>
+
         {/* Background tactical watermark */}
-        <div className="absolute top-2 right-4 text-7xl font-mono-tech font-extrabold text-slate-900/40 select-none pointer-events-none">
+        <div className="absolute top-2 right-4 text-7xl font-mono-tech font-extrabold text-slate-900/30 select-none pointer-events-none">
           LEVEL 0{activeEvo.clearanceLevel}
         </div>
 
@@ -180,16 +217,32 @@ export const DossierViewer: React.FC<DossierViewerProps> = ({
           </div>
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 relative z-10">
-          {/* Left Column: Profile Card & Simulator Trigger */}
+          {/* Left Column: Profile Card with 3D Hologram Tilt & Simulator Trigger */}
           <div className="lg:col-span-4 flex flex-col justify-between space-y-4">
-            <div className="p-4 bg-slate-900/60 rounded-xl border border-slate-800">
+            <div className="p-4 bg-slate-900/70 rounded-xl border border-slate-800/80 shadow-md">
               <div className="flex items-center gap-3 mb-3">
-                <div className="relative w-16 h-20 rounded-xl bg-gradient-to-br from-sky-600/30 to-indigo-900/50 border border-sky-400/50 flex items-center justify-center text-sky-200 text-2xl font-heading font-bold shadow-inner overflow-hidden shrink-0">
+                {/* 3D Holographic Perspective Tilt Photo Frame */}
+                <div
+                  onMouseMove={handleCardMouseMove}
+                  onMouseLeave={handleCardMouseLeave}
+                  style={{
+                    transform: `perspective(600px) rotateX(${cardTilt.x}deg) rotateY(${cardTilt.y}deg)`,
+                    transition: 'transform 0.15s ease-out'
+                  }}
+                  className="relative w-20 h-24 rounded-xl bg-gradient-to-br from-sky-600/30 to-indigo-900/50 border-2 border-sky-400/60 flex items-center justify-center text-sky-200 text-2xl font-heading font-bold shadow-xl overflow-hidden shrink-0 cursor-pointer hologram-shimmer"
+                >
                   {selectedChar.imageUrl ? (
                     <>
                       <img src={selectedChar.imageUrl} alt={selectedChar.name} className="w-full h-full object-cover" />
                       <div className="absolute inset-0 border border-cyan-400/50 rounded-xl pointer-events-none" />
                       <div className="absolute inset-x-0 top-0 h-0.5 bg-cyan-400 animate-pulse pointer-events-none" />
+                      {/* Specular glare overlay */}
+                      <div
+                        className="absolute inset-0 pointer-events-none mix-blend-overlay"
+                        style={{
+                          background: `radial-gradient(circle at ${cardTilt.glareX}% ${cardTilt.glareY}%, rgba(255,255,255,0.4) 0%, transparent 60%)`
+                        }}
+                      />
                     </>
                   ) : (
                     selectedChar.name.charAt(0)
@@ -198,12 +251,12 @@ export const DossierViewer: React.FC<DossierViewerProps> = ({
                 <div>
                   <div className="text-[10px] font-mono-tech text-sky-400 uppercase tracking-widest flex items-center gap-1">
                     {selectedChar.imageUrl && <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />}
-                    <span>DOSSIER: {selectedChar.id.toUpperCase()}</span>
+                    <span className="font-courier">SSR-DOSSIER: {selectedChar.id.toUpperCase()}</span>
                   </div>
                   <h3 className="text-lg font-heading font-bold text-white leading-tight">
                     {selectedChar.name}
                   </h3>
-                  <div className="text-xs text-slate-400 font-mono-tech mt-0.5">
+                  <div className="text-xs text-slate-400 font-courier mt-0.5">
                     Portrayed by {selectedChar.actor}
                   </div>
                 </div>
